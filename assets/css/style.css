@@ -1,0 +1,28 @@
+:root{--azul:#0F3D3E;--grafite:#1C1C1E;--lima:#C8FF3D;--off:#F7F7F2;--borda:#c9cfc9}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:16px;background:var(--azul);font-family:Montserrat,Verdana,sans-serif;color:var(--grafite)}
+.card{background:var(--off);border-radius:16px;padding:32px;width:min(420px,100%);box-shadow:0 12px 32px rgba(0,0,0,.25)}
+.logo{font-weight:800;color:var(--azul);letter-spacing:.5px;margin-bottom:4px}
+.logo span{background:var(--lima);padding:0 6px;border-radius:4px}
+h1{margin:0 0 8px;font-size:24px;color:var(--azul)}
+p{line-height:1.5;margin:8px 0}
+label{display:block;margin-top:14px;font-size:14px;font-weight:600}
+input{width:100%;margin-top:6px;padding:12px;border:1px solid var(--borda);border-radius:8px;font-size:16px;background:#fff}
+input:focus{outline:3px solid var(--lima);border-color:var(--azul)}
+small{display:block;margin-top:6px;color:#555;font-size:12px}
+.btn{display:block;width:100%;margin-top:18px;padding:13px;border:0;border-radius:8px;background:var(--lima);color:var(--grafite);font:700 16px inherit;font-family:inherit;text-align:center;text-decoration:none;cursor:pointer}
+.btn:hover{filter:brightness(.95)}
+.btn.sec{background:#fff;border:1px solid var(--borda)}
+.links{margin-top:18px;font-size:14px;text-align:center}
+.links a{color:var(--azul);font-weight:600}
+.divisor{display:flex;align-items:center;gap:10px;margin:18px 0 0;color:#777;font-size:13px}
+.divisor::before,.divisor::after{content:"";flex:1;height:1px;background:var(--borda)}
+.codigo{text-align:center;font-size:28px;letter-spacing:10px}
+.splash{display:grid;place-items:center;text-align:center}
+.splash .marca{color:var(--lima);font-size:clamp(32px,8vw,56px);font-weight:800;animation:pulsa 1s ease-in-out infinite alternate}
+.splash .slogan{color:var(--off);opacity:.8;margin-top:8px}
+@keyframes pulsa{to{opacity:.4}}
+.err{background:#fde2e2;padding:10px;border-radius:8px;font-size:14px}
+.ok{background:#e7ffd0;padding:10px;border-radius:8px;font-size:14px}
+.dev{background:#fff3c4;padding:10px;border-radius:8px;font-size:13px;word-break:break-all}
+.col{width:min(420px,100%);display:grid;gap:12px}.col .card{width:100%}

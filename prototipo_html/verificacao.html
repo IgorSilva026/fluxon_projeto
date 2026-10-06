@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verificação em 2 etapas · Fluxon Analytics</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<main class="card">
+  <div class="logo">Fluxon<span>Analytics</span></div>
+  <h1>Verificação em 2 etapas</h1>
+  <p>Enviamos um código de 6 dígitos para o seu e-mail. Ele vale por 10 minutos.</p>
+  <form action="painel.html" method="get">
+    <label for="cod">Código</label>
+    <input id="cod" name="cod" class="codigo" type="text" inputmode="numeric" maxlength="6" pattern="\d{6}" autocomplete="one-time-code" required>
+    <button class="btn" type="submit">Confirmar</button>
+  </form>
+  <p class="links"><a href="login.html">Voltar</a></p>
+</main>
+</body></html>

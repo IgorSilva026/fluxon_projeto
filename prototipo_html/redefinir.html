@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nova senha · Fluxon Analytics</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<main class="card">
+  <div class="logo">Fluxon<span>Analytics</span></div>
+  <h1>Nova senha</h1>
+  <form action="login.html" method="get">
+    <label for="senha">Nova senha</label>
+    <input id="senha" name="senha" type="password" autocomplete="new-password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}" title="Mínimo de 8 caracteres, com maiúscula, minúscula, número e símbolo" required>
+    <small>Mínimo de 8 caracteres, com maiúscula, minúscula, número e símbolo.</small>
+    <label for="senha2">Confirmar senha</label>
+    <input id="senha2" name="senha2" type="password" autocomplete="new-password" required>
+    <button class="btn" type="submit">Salvar senha</button>
+  </form>
+</main>
+</body></html>
