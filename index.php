@@ -1,5 +1,10 @@
 <?php
-session_start();
+session_start(['use_strict_mode' => 1, 'cookie_httponly' => true,
+  'cookie_secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+  'cookie_samesite' => 'Lax']);
+header('Cache-Control: no-store');
+header('Referrer-Policy: no-referrer');
+header('X-Content-Type-Options: nosniff');
 $C = require __DIR__ . '/config.php';
 $db = new PDO($C['db']['dsn'], $C['db']['user'], $C['db']['pass'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
 $p = $_GET['p'] ?? 'splash';
@@ -17,8 +22,21 @@ function form($in, $btn) { return '<form method="post"><input type="hidden" name
 
 function enviar($to, $sub, $body) {
   global $C;
-  if ($C['dev']) { file_put_contents(__DIR__ . '/emails.log', '[' . date('c') . "] $to | $sub\n$body\n\n", FILE_APPEND); $_SESSION['dev'] = $body; }
-  else mail($to, $sub, $body, "From: {$C['from']}");
+  try {
+    if (!is_file(__DIR__ . '/vendor/autoload.php')) throw new RuntimeException('Dependências ausentes');
+    require_once __DIR__ . '/vendor/autoload.php';
+    $m = new \PHPMailer\PHPMailer\PHPMailer(true);
+    $m->isSMTP(); $m->Host = $C['smtp']['host'];
+    $m->Port = $C['smtp']['port']; $m->SMTPAuth = true;
+    $m->Username = $C['smtp']['user']; $m->Password = $C['smtp']['pass'];
+    $m->SMTPSecure = $C['smtp']['secure']; $m->Timeout = 15;
+    $m->CharSet = 'UTF-8'; $m->setFrom($C['from'], 'Fluxon Analytics');
+    $m->addAddress($to); $m->Subject = $sub; $m->Body = $body;
+    return $m->send();
+  } catch (Throwable $e) {
+    error_log('Fluxon: falha no envio SMTP. Verifique a configuração do serviço.');
+    return false;
+  }
 }
 function token($uid, $tipo, $cod) {
   global $db;
@@ -32,7 +50,10 @@ function inicia2fa($uid) {
   $q = $db->prepare('SELECT email FROM users WHERE id=?'); $q->execute([$uid]);
   $cod = (string)random_int(100000, 999999);
   token($uid, '2fa', $cod);
-  enviar($q->fetch()['email'], 'Seu código de verificação Fluxon', "Código: $cod (válido por 10 minutos)");
+  if (!enviar($q->fetch()['email'], 'Seu código de verificação Fluxon', "Código: $cod (válido por 10 minutos)")) {
+    $db->prepare("UPDATE tokens SET usado=1 WHERE user_id=? AND tipo='2fa'")->execute([$uid]);
+    unset($_SESSION['pre']); flash('err', 'Não foi possível enviar o código. Tente novamente mais tarde.'); go('login');
+  }
   $_SESSION['pre'] = $uid;
   go('2fa');
 }
@@ -41,15 +62,13 @@ function http($url, $post = null, $auth = null) {
   curl_setopt_array($c, [CURLOPT_RETURNTRANSFER => 1, CURLOPT_TIMEOUT => 10]);
   if ($post) { curl_setopt($c, CURLOPT_POST, 1); curl_setopt($c, CURLOPT_POSTFIELDS, http_build_query($post)); }
   if ($auth) curl_setopt($c, CURLOPT_HTTPHEADER, ["Authorization: Bearer $auth"]);
-  return json_decode(curl_exec($c), true);
+  $body = curl_exec($c); $status = curl_getinfo($c, CURLINFO_HTTP_CODE); curl_close($c);
+  if ($body === false || $status < 200 || $status >= 300) return [];
+  $data = json_decode($body, true); return is_array($data) ? $data : [];
 }
 function view($t, $b) {
   global $C, $err;
   $x = '';
-  if ($C['dev'] && !empty($_SESSION['dev'])) {
-    $x = '<p class="dev"><b>DEV – e-mail simulado:</b><br>' . preg_replace('~https?://\S+~', '<a href="$0">$0</a>', nl2br(e($_SESSION['dev']))) . '</p>';
-    unset($_SESSION['dev']);
-  }
   foreach (['ok', 'err'] as $k) if (!empty($_SESSION[$k])) { $x .= "<p class=\"$k\">" . e($_SESSION[$k]) . '</p>'; unset($_SESSION[$k]); }
   if ($err) $x .= '<p class="err">' . e($err) . '</p>';
   echo '<!doctype html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . e($t) . ' · Fluxon</title><link rel="stylesheet" href="assets/css/style.css"></head><body>' . ($x ? '<div class="col">' . $x . $b . '</div>' : $b) . '</body></html>';
@@ -77,7 +96,7 @@ switch ($p) {
         if ($q->fetch()) $err = 'E-mail já cadastrado.';
         else {
           $db->prepare('INSERT INTO users(nome,email,senha_hash) VALUES(?,?,?)')->execute([$n, $m, password_hash($s, PASSWORD_DEFAULT)]);
-          flash('ok', 'Conta criada! Faça login.'); go('login');
+          flash('ok', 'Cadastro recebido. Confirme seu e-mail para concluir o acesso.'); inicia2fa($db->lastInsertId());
         }
       }
     }
@@ -109,7 +128,10 @@ switch ($p) {
       if ($t) $db->prepare('UPDATE tokens SET tentativas=tentativas+1 WHERE id=?')->execute([$t['id']]);
       if ($t && hash_equals($t['hash'], hash('sha256', trim($_POST['cod'])))) {
         $db->prepare('UPDATE tokens SET usado=1 WHERE id=?')->execute([$t['id']]);
-        session_regenerate_id(true); unset($_SESSION['pre']); $_SESSION['uid'] = $uid; go('painel');
+        $db->prepare('UPDATE users SET email_verificado_em=COALESCE(email_verificado_em,NOW()) WHERE id=?')->execute([$uid]);
+        $v = $db->prepare('SELECT versao_sessao FROM users WHERE id=?'); $v->execute([$uid]);
+        session_regenerate_id(true); unset($_SESSION['pre']); $_SESSION['uid'] = $uid;
+        $_SESSION['versao_sessao'] = (int)$v->fetchColumn(); go('painel');
       }
       $err = 'Código inválido ou expirado.';
     }
@@ -119,7 +141,10 @@ switch ($p) {
     if ($POST) {
       chk();
       $q = $db->prepare('SELECT id,email FROM users WHERE email=?'); $q->execute([strtolower(trim($_POST['email']))]); $u = $q->fetch();
-      if ($u) { $tk = bin2hex(random_bytes(32)); token($u['id'], 'reset', $tk); enviar($u['email'], 'Recuperação de senha Fluxon', "Redefina sua senha (link válido por 1 hora):\n{$C['base']}?p=redefinir&t=$tk"); }
+      if ($u) {
+        $limit = $db->prepare('UPDATE users SET ultimo_reset=NOW() WHERE id=? AND (ultimo_reset IS NULL OR ultimo_reset < DATE_SUB(NOW(),INTERVAL 60 SECOND))');
+        $limit->execute([$u['id']]);
+        if ($limit->rowCount() === 1) { $tk = bin2hex(random_bytes(32)); token($u['id'], 'reset', $tk); enviar($u['email'], 'Recuperação de senha Fluxon', "Redefina sua senha (link válido por 1 hora):\n{$C['base']}?p=redefinir&t=$tk"); } }
       flash('ok', 'Se o e-mail existir, enviamos o link de recuperação.'); go('recuperar');
     }
     card('Recuperar senha', form(f('email', 'E-mail cadastrado', 'email'), 'Enviar link') . '<p class="links"><a href="?p=login">Voltar</a></p>');
@@ -133,8 +158,9 @@ switch ($p) {
       if (!forte($_POST['senha'])) $err = 'Senha fraca: mínimo 8 caracteres com maiúscula, minúscula, número e símbolo.';
       elseif ($_POST['senha'] !== $_POST['senha2']) $err = 'As senhas não coincidem.';
       else {
-        $db->prepare('UPDATE users SET senha_hash=?,tentativas=0,bloqueado_ate=NULL WHERE id=?')->execute([password_hash($_POST['senha'], PASSWORD_DEFAULT), $t['user_id']]);
-        $db->prepare('UPDATE tokens SET usado=1 WHERE id=?')->execute([$t['id']]);
+        $db->prepare('UPDATE users SET senha_hash=?,tentativas=0,bloqueado_ate=NULL,versao_sessao=versao_sessao+1 WHERE id=?')->execute([password_hash($_POST['senha'], PASSWORD_DEFAULT), $t['user_id']]);
+        $db->prepare('UPDATE tokens SET usado=1 WHERE user_id=?')->execute([$t['user_id']]);
+        unset($_SESSION['pre'], $_SESSION['uid'], $_SESSION['versao_sessao']);
         flash('ok', 'Senha alterada! Faça login.'); go('login');
       }
     }
@@ -147,10 +173,11 @@ switch ($p) {
     exit;
 
   case 'gcb':
-    if (!hash_equals($_SESSION['st'] ?? 'x', $_GET['state'] ?? '') || empty($_GET['code'])) go('login');
+    if (empty($_SESSION['st']) || !hash_equals($_SESSION['st'], $_GET['state'] ?? '') || empty($_GET['code'])) go('login');
+    unset($_SESSION['st']);
     $tok = http('https://oauth2.googleapis.com/token', ['code' => $_GET['code'], 'client_id' => $C['google']['id'], 'client_secret' => $C['google']['secret'], 'redirect_uri' => $C['base'] . '?p=gcb', 'grant_type' => 'authorization_code']);
     $i = http('https://openidconnect.googleapis.com/v1/userinfo', null, $tok['access_token'] ?? '');
-    if (empty($i['email']) || empty($i['email_verified'])) { flash('err', 'Falha no login com Google.'); go('login'); }
+    if (empty($i['sub']) || empty($i['email']) || ($i['email_verified'] ?? false) !== true) { flash('err', 'Falha no login com Google.'); go('login'); }
     $q = $db->prepare('SELECT id FROM users WHERE email=?'); $q->execute([strtolower($i['email'])]); $u = $q->fetch();
     if ($u) $db->prepare('UPDATE users SET google_id=? WHERE id=?')->execute([$i['sub'], $u['id']]);
     else { $db->prepare('INSERT INTO users(nome,email,google_id) VALUES(?,?,?)')->execute([$i['name'] ?? 'Usuário', strtolower($i['email']), $i['sub']]); $u = ['id' => $db->lastInsertId()]; }
@@ -158,7 +185,8 @@ switch ($p) {
 
   case 'painel':
     if (empty($_SESSION['uid'])) go('login');
-    $q = $db->prepare('SELECT nome,email FROM users WHERE id=?'); $q->execute([$_SESSION['uid']]); $u = $q->fetch();
+    $q = $db->prepare('SELECT nome,email,email_verificado_em,versao_sessao FROM users WHERE id=?'); $q->execute([$_SESSION['uid']]); $u = $q->fetch();
+    if (!$u || !$u['email_verificado_em'] || (int)$u['versao_sessao'] !== ($_SESSION['versao_sessao'] ?? -1)) { session_destroy(); go('login'); }
     if ($POST) { chk(); session_destroy(); header("Location: {$C['base']}?p=inicio"); exit; }
     card('Painel', '<p>Olá, <b>' . e($u['nome']) . '</b>!<br>' . e($u['email']) . '</p>' . form('', 'Sair'));
 
