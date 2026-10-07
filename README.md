@@ -1,21 +1,28 @@
-# Fluxon Analytics — Fase 1: Controle de Acesso
+# Fluxon Analytics — Fase 1 Controle de Acesso
+
+Aplicação PHP/MySQL com splash, cadastro, login tradicional, acesso Google, verificação por e-mail e recuperação de senha.
+
+Leia **GUIA_CONFIGURACAO.md** para instalação, migração, configuração de SMTP/Google e roteiro de testes.
+
+## Alterações desta revisão
+- Envio real por SMTP usando PHPMailer; removido o modo que expunha códigos e links.
+- Segredos em config.local.php, ignorado pelo Git.
+- Cadastro solicita confirmação do e-mail antes de liberar o painel.
+- Recuperação invalida sessões e tokens anteriores após troca da senha.
+- Intervalo mínimo de 60 segundos entre solicitações de recuperação por conta.
+- Cookies HttpOnly/SameSite, prevenção de cache e referer para links de recuperação.
+- OAuth com consumo único de state e tratamento de falhas HTTP.
+- Migração para bancos existentes, mantendo usuários.
+- Remoção de emails.log do projeto e proteção Apache adicional.
+
+## Validação
+Revisão estática e análise sintática dos arquivos PHP. Execução com PHP/MySQL, instalação Composer, envio SMTP e login Google ainda precisam ser validados no XAMPP. Não declarar a atividade concluída sem preencher o roteiro do guia.
 
 ## Estrutura
-```
-fluxon_projeto/
-├── index.php            # sistema (rotas, login, cadastro, 2FA, recuperação, Google)
-├── config.php           # banco, URL base, Google OAuth, modo dev
-├── .htaccess            # bloqueia acesso direto a .log e .sql
-├── assets/css/style.css # estilos compartilhados (PHP e protótipo)
-├── database/schema.sql  # tabelas users e tokens
-└── prototipo_html/      # telas estáticas (abrir index.html)
-```
-
-## Como rodar (XAMPP)
-1. Copie a pasta para `C:\xampp\htdocs\fluxon_projeto`.
-2. Inicie Apache e MySQL; importe `database/schema.sql` no phpMyAdmin.
-3. Ajuste `'base'` no `config.php` para `http://localhost/fluxon_projeto/index.php`.
-4. Acesse http://localhost/fluxon_projeto/index.php
-
-Google: preencher `id`/`secret` no `config.php` e cadastrar `<base>?p=gcb` como URI de redirecionamento.
-Modo dev (`'dev' => true`): e-mails aparecem na tela e em `emails.log`.
+- index.php: telas e rotas reais
+- config.php: valores padrão, sem segredos
+- config.local.example.php: modelo de configuração local
+- composer.json: dependências PHP
+- database/schema.sql: instalação nova
+- database/migracao_001.sql: atualização do banco existente, uma vez
+- prototipo_html/: demonstração estática, sem autenticação real

@@ -9,6 +9,9 @@ CREATE TABLE users (
   google_id VARCHAR(40) NULL,
   tentativas TINYINT NOT NULL DEFAULT 0, -- falhas de login seguidas
   bloqueado_ate DATETIME NULL,
+  email_verificado_em DATETIME NULL,
+  versao_sessao INT NOT NULL DEFAULT 0,
+  ultimo_reset DATETIME NULL,
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
