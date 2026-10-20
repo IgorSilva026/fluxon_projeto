@@ -1,0 +1,13 @@
+{
+  "tabWidth": 4,
+  "singleQuote": true,
+  "phpVersion": "8.1",
+  "overrides": [
+    {
+      "files": ["*.js", "*.css", "*.json", "*.md"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}
