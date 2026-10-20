@@ -1,0 +1,33 @@
+/* A largura depende da rota, inclusive quando há mensagens de retorno. */
+html {
+  scrollbar-gutter: stable;
+}
+body.fluxon-wide {
+  display: block;
+  padding: 24px 16px;
+}
+body.fluxon-wide > .card,
+body.fluxon-wide > .col {
+  width: 100%;
+  max-width: 900px;
+  min-width: 0;
+  margin: 0 auto;
+}
+body.fluxon-wide > .col > .card {
+  width: 100%;
+  max-width: none;
+}
+body.fluxon-wide .card {
+  padding: 32px;
+}
+body.fluxon-wide .card p,
+body.fluxon-wide .card li,
+body.fluxon-wide .card dd {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  body.fluxon-wide .card {
+    padding: 20px;
+  }
+}
