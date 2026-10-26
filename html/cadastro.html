@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Criar conta · Fluxon Analytics</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<main class="card">
+  <div class="logo">Fluxon<span>Analytics</span></div>
+  <h1>Criar conta</h1>
+  <form action="login.html" method="get">
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" type="text" autocomplete="name" required>
+    <label for="email">E-mail</label>
+    <input id="email" name="email" type="email" autocomplete="email" required>
+    <label for="senha">Senha</label>
+    <input id="senha" name="senha" type="password" autocomplete="new-password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}" title="Mínimo de 8 caracteres, com maiúscula, minúscula, número e símbolo" required>
+    <small>Mínimo de 8 caracteres, com maiúscula, minúscula, número e símbolo.</small>
+    <label for="senha2">Confirmar senha</label>
+    <input id="senha2" name="senha2" type="password" autocomplete="new-password" required>
+    <button class="btn" type="submit">Cadastrar</button>
+  </form>
+  <p class="links"><a href="login.html">Já tenho conta</a></p>
+</main>
+</body></html>
