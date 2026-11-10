@@ -2,32 +2,28 @@
 
 ## Instalação nova
 
-1. Use PHP 8.1 ou superior com `pdo_mysql`, `curl`, `openssl`, `gd` e `fileinfo`. Execute o Composer com o mesmo PHP do XAMPP.
+1. Use PHP 8.1 ou superior com `pdo_pgsql`, `pgsql`, `curl`, `openssl`, `gd` e `fileinfo`. No XAMPP, remova o `;` de `extension=pdo_pgsql` e `extension=pgsql` no `php.ini` e reinicie o Apache. Execute o Composer com o mesmo PHP do XAMPP.
 2. Execute `composer install` na raiz. O `composer.lock` existente fixa a versão de PHPMailer; `vendor/` será recriado.
-3. Importe `database/schema.sql` em banco novo. Não use este script sobre a instalação existente.
-4. Copie `config.local.example.php` para `config.local.php`. Configure o DSN com a porta real do MySQL: 3306 é comum; o exemplo usa 3307, como o ambiente de teste do projeto.
+3. No Supabase, crie um projeto (anote a senha do banco). Abra **SQL Editor**, cole `database/schema.sql` e execute. O script pode ser repetido sem erro e já liga o RLS em todas as tabelas.
+4. Copie `.env.example` para `.env` (na raiz, ao lado do `index.php`). No Supabase clique em **Connect** e escolha **Session pooler**: copie o host para `DB_HOST`, a porta 5432 para `DB_PORT` e o usuário `postgres.SEU_PROJECT_REF` para `DB_USER`; `DB_PASS` é a senha do passo 3 (sem aspas e sem codificar caracteres especiais). O `config.local.php` ainda é aceito; se os dois existirem, o `.env` vence.
 5. Configure `base` com a URL exata do `index.php`. O exemplo usa `http://localhost/fluxon_projeto-main/index.php`.
-6. Inicie os serviços e abra a aplicação.
+6. Inicie o Apache e abra a aplicação.
 
-## Instalação existente
+### Qual conexão do Supabase usar
 
-Faça backup da pasta e exporte o banco antes de atualizar. Guarde seu `config.local.php` fora da cópia que vai ao GitHub. Ele não está no pacote revisado.
+| Conexão                         | Usar?                                                                                     |
+| ------------------------------- | ----------------------------------------------------------------------------------------- |
+| Session pooler (porta 5432)     | **Sim.** Funciona em IPv4 (rede de casa/faculdade) e aceita prepared statements.           |
+| Direct connection (`db.REF...`) | Só se sua rede tiver IPv6. Caso contrário o PHP não conecta.                              |
+| Transaction pooler (porta 6543) | **Não.** Quebra os prepared statements do PDO.                                            |
 
-Substitua a aplicação pela pasta revisada, recoloque seu `config.local.php` e execute `composer install`. Use uma pasta de teste primeiro. Não misture os arquivos antigos de `app/` com os novos: os módulos agora ficam em subpastas.
+O PHP conecta com o usuário do banco, não com as chaves `anon`/`service_role` do Supabase. Não coloque essas chaves no projeto. A senha do banco só vai em `.env` (ou `config.local.php`).
 
-Se todas as funcionalidades já estavam funcionando, esta organização **não exige migração adicional**. O schema completo foi corrigido apenas para instalações novas.
+## Vindo da versão MySQL
 
-Para uma base antiga, examine as colunas/tabelas antes de aplicar apenas as migrações pendentes, nesta ordem:
+Os dados do MySQL não são migrados automaticamente: crie o banco novo no Supabase e cadastre as contas de novo (em ambiente acadêmico é o caminho mais simples). Se precisar preservar contas reais, a migração de `users` exige cuidado com o `id` e com a sequência do Postgres, então faça-a à parte e com backup.
 
-| Arquivo                          | Quando necessário                                                                      |
-| -------------------------------- | -------------------------------------------------------------------------------------- |
-| `migracao_001.sql`               | Faltam as colunas de verificação de e-mail, versão de sessão e último reset em `users` |
-| `migracao_002_perfil.sql`        | Falta `user_profiles`                                                                  |
-| `migracao_003_configuracoes.sql` | Faltam os campos fiscais e de reserva em `user_profiles`                               |
-| `migracao_003_avaliacoes.sql`    | Falta `user_reviews`                                                                   |
-| `migracao_004_exclusao.sql`      | Falta `account_deletion_tokens`                                                        |
-
-Os dois arquivos com prefixo 003 são incrementos distintos. Seus nomes foram preservados. Os scripts com `ALTER TABLE ADD COLUMN` não devem ser repetidos em bases já atualizadas. Nenhuma migração foi executada no banco do usuário durante esta revisão.
+Faça backup da pasta antes de atualizar e guarde seu `config.local.php` fora da cópia que vai ao GitHub. Substitua a aplicação pela pasta revisada, recoloque o arquivo local (trocando o bloco `db` pelo do Supabase) e execute `composer install`. Os scripts em `database/mysql_legado/` são apenas histórico: **não** execute no Supabase.
 
 ## SMTP
 
@@ -43,11 +39,12 @@ O acesso Google é opcional. Configure o cliente OAuth Web e a URI de retorno ex
 
 O pacote não contém `config.local.php`, `emails.log` nem `vendor/`. A remoção do pacote não apaga arquivos ou histórico do repositório original. Se já estiverem rastreados, remova-os do índice do Git com `git rm --cached --ignore-unmatch config.local.php emails.log` e `git rm -r --cached --ignore-unmatch vendor` antes do commit, preservando as cópias locais necessárias. Credenciais anteriormente publicadas precisam ser substituídas no provedor.
 
-Confira as regras Apache: `app/`, `database/`, `tests/` e `docs/` não precisam de acesso HTTP direto; configuração e arquivos internos também são bloqueados na raiz. O fluxo deve ser iniciado por `index.php`.
+Confira as regras Apache: `app/`, `database/`, `html/`, `tests/` e `docs/` não precisam de acesso HTTP direto; configuração e arquivos internos também são bloqueados na raiz. O fluxo deve ser iniciado por `index.php`.
 
 ## Aceitação manual
 
-- Cadastro, login e Google com confirmação por e-mail.
+- Cadastro, login e Google com confirmação por e-mail (as telas vêm de `html/`).
+- No Supabase, em **Table Editor**, conferir que as tabelas aparecem com RLS ativo e que a chave `anon` não lê `users`.
 - Senha incorreta, bloqueio, código expirado/incorreto e recuperação de senha.
 - Salvar perfil, foto, alíquota e preferências; reabrir e conferir persistência.
 - Conferir Dashboard e Configurações com e sem mensagens de sucesso.

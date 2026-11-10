@@ -269,7 +269,7 @@ ob_start(); ?>
 
     <dt><strong>Distribuição</strong></dt>
     <dd>
-        Aplicação Web acadêmica em PHP e MySQL,
+        Aplicação Web acadêmica em PHP e PostgreSQL (Supabase),
         executada em servidor compatível.
         Não é um aplicativo distribuído por loja.
     </dd>

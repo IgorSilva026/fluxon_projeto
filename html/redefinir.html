@@ -10,7 +10,8 @@
 <main class="card">
   <div class="logo">Fluxon<span>Analytics</span></div>
   <h1>Nova senha</h1>
-  <form action="login.html" method="get">
+  <form method="post">
+    <input type="hidden" name="csrf" value="{{csrf}}">
     <label for="senha">Nova senha</label>
     <input id="senha" name="senha" type="password" autocomplete="new-password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}" title="Mínimo de 8 caracteres, com maiúscula, minúscula, número e símbolo" required>
     <small>Mínimo de 8 caracteres, com maiúscula, minúscula, número e símbolo.</small>
@@ -19,4 +20,9 @@
     <button class="btn" type="submit">Salvar senha</button>
   </form>
 </main>
+<script>
+(function(){var a=document.getElementById('senha'),b=document.getElementById('senha2');
+function v(){b.setCustomValidity(a.value===b.value?'':'As senhas não coincidem.');}
+a.addEventListener('input',v);b.addEventListener('input',v);})();
+</script>
 </body></html>

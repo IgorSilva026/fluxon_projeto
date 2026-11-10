@@ -11,11 +11,12 @@
   <div class="logo">Fluxon<span>Analytics</span></div>
   <h1>Verificação em 2 etapas</h1>
   <p>Enviamos um código de 6 dígitos para o seu e-mail. Ele vale por 10 minutos.</p>
-  <form action="painel.html" method="get">
+  <form method="post">
+    <input type="hidden" name="csrf" value="{{csrf}}">
     <label for="cod">Código</label>
     <input id="cod" name="cod" class="codigo" type="text" inputmode="numeric" maxlength="6" pattern="\d{6}" autocomplete="one-time-code" required>
     <button class="btn" type="submit">Confirmar</button>
   </form>
-  <p class="links"><a href="login.html">Voltar</a></p>
+  <p class="links"><a href="?p=login">Voltar</a></p>
 </main>
 </body></html>

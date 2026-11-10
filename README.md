@@ -1,6 +1,6 @@
 # Fluxon Analytics — Tesoureiro Digital
 
-Projeto acadêmico em PHP e MySQL para acesso, perfil e configurações iniciais de organização financeira.
+Projeto acadêmico em PHP e PostgreSQL (Supabase) para acesso, perfil e configurações iniciais de organização financeira.
 
 ## Funcionalidades
 
@@ -13,15 +13,15 @@ Fluxo de caixa, transações, automação de reserva fiscal, alertas financeiros
 
 ## Instalação
 
-Requer PHP 8.1+, MySQL/MariaDB com InnoDB e Composer. Habilite PDO MySQL, cURL, OpenSSL, GD e Fileinfo no PHP do XAMPP. GD e Fileinfo são usados nas fotos.
+Requer PHP 8.1+, Composer e um projeto no [Supabase](https://supabase.com) (usado como banco PostgreSQL; a autenticação continua no PHP). No PHP do XAMPP habilite `pdo_pgsql`, `pgsql`, `curl`, `openssl`, `gd` e `fileinfo` (em `php.ini`, remova o `;` das linhas `extension=...`). GD e Fileinfo são usados nas fotos.
 
 1. Extraia a pasta `fluxon_projeto-main` em `C:\xampp\htdocs`.
 2. Na raiz do projeto, execute `composer install`.
-3. Para instalação nova, importe somente `database/schema.sql`. Ele inclui todas as tabelas desta entrega.
-4. Copie `config.local.example.php` para `config.local.php` e configure banco, URL, SMTP e Google, se utilizado.
-5. Inicie Apache e MySQL. Acesse `http://localhost/fluxon_projeto-main/index.php`.
+3. No Supabase, abra **SQL Editor**, cole o conteúdo de `database/schema.sql` e execute. Ele cria todas as tabelas e liga o RLS para a API pública não enxergá-las.
+4. Copie `.env.example` para `.env` e preencha banco (**Connect > Session pooler**), URL, SMTP e Google, se utilizado. O `config.local.php` continua funcionando como alternativa; se os dois existirem, o `.env` vence.
+5. Inicie o Apache. Acesse `http://localhost/fluxon_projeto-main/index.php`.
 
-**Atualização de uma instalação existente:** preserve seu `config.local.php`, faça backup do banco e siga o [guia de configuração](GUIA_CONFIGURACAO.md). Não reimporte o schema nem repita migrações já aplicadas.
+**Vindo da versão MySQL:** os dados do MySQL não são migrados automaticamente. Veja o [guia de configuração](GUIA_CONFIGURACAO.md). Não execute os scripts de `database/mysql_legado/` no Supabase.
 
 O ZIP para GitHub não contém credenciais, banco de usuários, logs nem `vendor/`. Instale as dependências e mantenha a configuração privada apenas no ambiente local.
 
@@ -35,7 +35,8 @@ O ZIP para GitHub não contém credenciais, banco de usuários, logs nem `vendor
 | `app/repositories/`          | Persistência de perfil e avaliação                          |
 | `app/views/`                 | Telas PHP/HTML                                              |
 | `assets/css/` e `assets/js/` | Estilos e comportamento no navegador                        |
-| `database/`                  | Schema completo e migrações existentes                      |
+| `html/`                      | Telas de autenticação (templates lidos pelo `index.php`)    |
+| `database/`                  | Schema PostgreSQL (Supabase); `mysql_legado/` é só histórico |
 | `tests/`                     | Verificação de sintaxe e validações sem banco               |
 | `docs/`                      | Revisão, lista de remoções e documentação histórica         |
 
