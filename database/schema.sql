@@ -98,3 +98,28 @@ BEGIN
     REVOKE EXECUTE ON FUNCTION public.set_atualizado_em() FROM anon, authenticated, PUBLIC;
   END IF;
 END $$;
+
+
+-- Rode UMA vez no SQL Editor do Supabase se você já tinha rodado o schema.sql antigo.
+-- Pode repetir sem erro.
+
+-- Lançamentos financeiros (entradas e saídas) de cada usuário.
+CREATE TABLE IF NOT EXISTS public.lancamentos (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  descricao VARCHAR(120) NOT NULL,
+  tipo VARCHAR(7) NOT NULL CHECK (tipo IN ('entrada', 'saida')),
+  categoria VARCHAR(10) NOT NULL DEFAULT 'geral' CHECK (categoria IN ('geral', 'imposto')),
+  valor NUMERIC(12,2) NOT NULL CHECK (valor > 0),
+  data DATE NOT NULL,                      -- data de vencimento / recebimento
+  concluido SMALLINT NOT NULL DEFAULT 0 CHECK (concluido IN (0, 1)),  -- 1 = recebido/pago
+  criado_em TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS lancamentos_user_data_idx ON public.lancamentos (user_id, data);
+ALTER TABLE public.lancamentos ENABLE ROW LEVEL SECURITY;
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN
+    REVOKE ALL ON public.lancamentos FROM anon, authenticated;
+  END IF;
+END $$;

@@ -1,0 +1,470 @@
+/* Dashboard e Transações — usa a barra lateral e a topbar do settings.css */
+.dash-content {
+  padding: 16px 24px 40px;
+  max-width: 1240px;
+}
+.topbar .bell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  background: #fff;
+  color: #17242c;
+}
+.topbar .bell .dot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e5484d;
+  border: 1.5px solid #fff;
+}
+.topbar .mini-avatar {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 10px;
+}
+
+.lbl {
+  display: block;
+  font-size: 11px;
+  opacity: 0.85;
+}
+.dash-top {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: #173f40;
+  color: #fff;
+  border-radius: 16px;
+  padding: 22px 24px;
+  min-height: 160px;
+}
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero::before {
+  width: 190px;
+  height: 190px;
+  right: -20px;
+  top: -30px;
+  background: #c7ff3820;
+}
+.hero::after {
+  width: 80px;
+  height: 80px;
+  right: 40px;
+  bottom: 18px;
+  background: #4aa3b04d;
+}
+.hero .lbl {
+  color: #cfe3e3;
+}
+.hero .saldo {
+  display: block;
+  font-size: 34px;
+  letter-spacing: -0.5px;
+  margin: 4px 0 16px;
+}
+.hero-cols {
+  display: flex;
+  gap: 28px;
+  position: relative;
+  z-index: 1;
+}
+.hero-cols b {
+  display: block;
+  font-size: 13px;
+  margin-top: 2px;
+}
+.hero .pos {
+  color: #3ddc84;
+}
+.hero .neg {
+  color: #ff6b6b;
+}
+
+.dash-card {
+  background: #fff;
+  border: 1px solid #e3e3dc;
+  border-radius: 16px;
+  padding: 20px 22px;
+}
+.reserva .reserva-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.reserva .lbl {
+  color: #5b6870;
+}
+.reserva .pct {
+  display: block;
+  font-size: 24px;
+  margin-top: 4px;
+}
+.reserva .ico {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #3d9aa3;
+  color: #fff;
+}
+.bar-track {
+  height: 8px;
+  background: #ecece6;
+  border-radius: 99px;
+  margin: 14px 0 12px;
+  overflow: hidden;
+}
+.bar-track i {
+  display: block;
+  height: 100%;
+  background: #2f8f96;
+  border-radius: 99px;
+}
+.reserva small {
+  display: block;
+  color: #5b6870;
+  font-size: 11px;
+}
+.reserva small b {
+  color: #17242c;
+}
+.reserva .det {
+  margin-top: 4px;
+  color: #8a949a;
+}
+
+.chart {
+  margin-bottom: 22px;
+}
+.chart h2,
+.card-title {
+  font-size: 13px;
+  margin: 0;
+  color: #17242c;
+}
+.chart .sub {
+  margin: 4px 0 16px;
+  color: #6b7780;
+  font-size: 11px;
+}
+.chart-body {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 8px;
+  padding: 0 8px 0 4px;
+}
+.y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 160px;
+  font-size: 10px;
+  color: #6b7780;
+  line-height: 1;
+}
+.cols {
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  background: repeating-linear-gradient(
+    to top,
+    transparent 0,
+    transparent calc(25% - 1px),
+    #f0f0ea calc(25% - 1px),
+    #f0f0ea 25%
+  );
+  background-size: 100% 160px;
+  background-repeat: no-repeat;
+}
+.col-bar {
+  display: grid;
+  grid-template-rows: 160px 26px;
+  justify-items: center;
+  align-items: end;
+}
+.col-bar .bar {
+  display: block;
+  width: 36px;
+  max-width: 60%;
+  height: calc(160px * var(--h) / 100);
+  background: #63a5ad;
+  border-radius: 6px 6px 3px 3px;
+}
+.col-bar .bar.now {
+  background: #c7ff38;
+}
+.col-bar span {
+  align-self: center;
+  font-size: 11px;
+  color: #6b7780;
+}
+
+.list-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 10px;
+}
+.list-head h2 {
+  font-size: 13px;
+  margin: 0;
+}
+.list-head span {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  font-size: 11px;
+}
+.cta {
+  display: inline-block;
+  background: #c7ff38;
+  color: #173f40;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.table-wrap {
+  background: #fff;
+  border: 1px solid #e3e3dc;
+  border-radius: 14px;
+  overflow-x: auto;
+}
+.lanc {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 560px;
+}
+.lanc th {
+  text-align: left;
+  font-weight: 600;
+  color: #6b7780;
+  font-size: 11px;
+  padding: 12px 18px;
+  background: #f4f4ee;
+  border-bottom: 1px solid #e3e3dc;
+}
+.lanc td {
+  padding: 16px 18px;
+  border-bottom: 1px solid #ecece6;
+  vertical-align: middle;
+}
+.lanc tr:last-child td {
+  border-bottom: 0;
+}
+.lanc .mut {
+  color: #6b7780;
+}
+.lanc .pos {
+  color: #2f9e5b;
+  font-weight: 600;
+}
+.lanc .neg-t {
+  color: #17242c;
+  font-weight: 600;
+}
+.pill {
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+.pill.ok {
+  background: #e2f4e8;
+  color: #2f9e5b;
+}
+.pill.late {
+  background: #fde8e8;
+  color: #d64545;
+}
+.pill.wait {
+  background: #ecece6;
+  color: #6b7780;
+}
+.tag {
+  font-size: 10px;
+  background: #e8f1f2;
+  color: #2f6f75;
+  padding: 2px 7px;
+  border-radius: 99px;
+  margin-left: 4px;
+}
+.vazio {
+  text-align: center;
+  color: #5b6870;
+}
+.vazio p {
+  margin: 6px 0 14px;
+}
+
+/* Transações */
+.lanc-form {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+  margin-top: 14px;
+}
+.lanc-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 11px;
+  color: #5b6870;
+}
+.lanc-form .f-desc {
+  grid-column: span 3;
+}
+.lanc-form input:not([type='checkbox']),
+.lanc-form select {
+  width: 100%;
+  border: 1px solid #d8d8d0;
+  border-radius: 8px;
+  padding: 9px 10px;
+  font: inherit;
+  background: #fff;
+}
+.lanc-form .chk {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  grid-column: span 3;
+  font-weight: normal;
+  padding-bottom: 10px;
+}
+.lanc-form input[type='checkbox'] {
+  width: auto;
+  flex: none;
+  margin: 0;
+}
+.lanc-form .save {
+  grid-column: span 2;
+  justify-self: end;
+  margin: 0;
+}
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0 10px;
+  flex-wrap: wrap;
+}
+.tabs a {
+  text-decoration: none;
+  font-size: 12px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  border: 1px solid #deded7;
+  background: #fff;
+}
+.tabs a.on {
+  background: #173f40;
+  color: #c7ff38;
+  border-color: #173f40;
+}
+.lanc .acoes {
+  text-align: right;
+  white-space: nowrap;
+}
+.lanc .acoes form {
+  display: inline-flex;
+  gap: 12px;
+}
+.lnk {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: #2f6f75;
+  font: inherit;
+  font-size: 11px;
+  text-decoration: underline;
+}
+.lnk.del {
+  color: #d64545;
+}
+.pager {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 14px 0 0;
+  font-size: 12px;
+}
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.fab {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: #c7ff38;
+  color: #173f40;
+  box-shadow: 0 6px 18px #173f4040;
+}
+
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid #2f8f96;
+  outline-offset: 2px;
+}
+
+@media (max-width: 980px) {
+  .dash-top {
+    grid-template-columns: 1fr;
+  }
+  .lanc-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lanc-form .f-desc,
+  .lanc-form .chk,
+  .lanc-form .save {
+    grid-column: 1 / -1;
+  }
+}
+
+/* "Em breve" do menu sem quebrar linha (só em telas com menu lateral) */
+@media (min-width: 651px) {
+  .sidebar nav > span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .sidebar nav > span small {
+    white-space: nowrap;
+    font-size: 9px;
+    margin: 0;
+  }
+}

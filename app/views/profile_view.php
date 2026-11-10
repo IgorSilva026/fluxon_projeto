@@ -49,10 +49,9 @@ ob_start();
                 <small>Em breve</small>
             </span>
 
-            <span>
+            <a href="?p=transacoes">
                 ≡ &nbsp; Transações
-                <small>Em breve</small>
-            </span>
+            </a>
 
             <a class="active" href="?p=perfil" aria-current="page">
                 ⚙ &nbsp; Configurações

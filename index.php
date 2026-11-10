@@ -8,6 +8,7 @@ session_start([
 header('Cache-Control: no-store');
 header('Referrer-Policy: no-referrer');
 header('X-Content-Type-Options: nosniff');
+date_default_timezone_set('America/Sao_Paulo');
 $C = require __DIR__ . '/config.php';
 // PostgreSQL (Supabase). Use a conexão "Session pooler" (porta 5432) ou a direta.
 $db = new PDO($C['db']['dsn'], $C['db']['user'], $C['db']['pass'], [
@@ -265,6 +266,7 @@ $modulos = [
     'sobre' => 'support.php',
     'avaliacao' => 'reviews.php',
     'acessibilidade' => 'accessibility.php',
+    'transacoes' => 'transactions.php',
 ];
 
 if (isset($modulos[$p])) {
@@ -541,7 +543,7 @@ switch ($p) {
             header("Location: {$C['base']}?p=inicio");
             exit();
         }
-        require __DIR__ . '/app/views/dashboard_view.php';
+        require __DIR__ . '/app/controllers/dashboard.php';
 
     default:
         go('splash');
