@@ -1,0 +1,13 @@
+Verificação em 20/10/2026 — PHP 8.5.10 via PHP.wasm CLI
+
+Sintaxe PHP aprovada: 27 arquivos.
+Validações de perfil aprovadas.
+Validação de senha aprovada.
+Validação de avaliação aprovada.
+Validações de exclusão aprovadas.
+Sintaxe JavaScript aprovada: 4 arquivos (Node.js 24.19.0).
+Referências literais __DIR__ verificadas: 24; nenhuma ausente (exceto arquivos locais/Composer esperados).
+Comparação de AST original/revisada: regras preservadas em 6 serviços/repositórios, normalizando blocos de uma instrução.
+Renderização PHP de 8 telas com dados fictícios: perfil, painel, segurança, exclusão, avaliação, suporte, FAQ e sobre; sem avisos PHP. Não equivale a teste visual ou de rotas autenticadas.
+
+Não executados: MySQL/MariaDB, Apache/XAMPP, SMTP, Google OAuth, teste visual no navegador e exclusão real.

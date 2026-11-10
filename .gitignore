@@ -1,0 +1,14 @@
+/config.local.php
+/vendor/
+/node_modules/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+/.idea/
+/.vscode/
+*.zip
+*.bak
+*.tmp
