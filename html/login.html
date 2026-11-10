@@ -10,15 +10,15 @@
 <main class="card">
   <div class="logo">Fluxon<span>Analytics</span></div>
   <h1>Entrar</h1>
-  <form action="verificacao.html" method="get">
+  <form method="post">
+    <input type="hidden" name="csrf" value="{{csrf}}">
     <label for="email">E-mail</label>
     <input id="email" name="email" type="email" autocomplete="email" required>
     <label for="senha">Senha</label>
     <input id="senha" name="senha" type="password" autocomplete="current-password" required>
     <button class="btn" type="submit">Entrar</button>
   </form>
-  <div class="divisor">ou</div>
-  <a class="btn sec" href="#">Entrar com Google</a>
-  <p class="links"><a href="recuperar.html">Esqueci a senha</a> · <a href="cadastro.html">Criar conta</a></p>
+  {{google:Entrar com Google}}
+  <p class="links"><a href="?p=recuperar">Esqueci a senha</a> · <a href="?p=cadastro">Criar conta</a></p>
 </main>
 </body></html>

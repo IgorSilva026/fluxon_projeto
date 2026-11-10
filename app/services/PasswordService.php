@@ -73,7 +73,7 @@ final class PasswordService
                 );
                 $q->execute([
                     $tries,
-                    $tries >= 5 ? date('Y-m-d H:i:s', time() + 900) : null,
+                    $tries >= 5 ? date('c', time() + 900) : null,
                     $id,
                 ]);
                 $db->commit();
