@@ -26,7 +26,7 @@ final class AccountDeletionService
         try {
             $u = $this->lockAccount($id, $version);
             $q = $this->db->prepare(
-                'SELECT (solicitado_em>DATE_SUB(NOW(),INTERVAL 60 SECOND)) AS aguardar FROM account_deletion_tokens WHERE user_id=?',
+                "SELECT (solicitado_em>NOW()-INTERVAL '60 seconds') AS aguardar FROM account_deletion_tokens WHERE user_id=?",
             );
             $q->execute([$id]);
             $old = $q->fetch();
@@ -38,7 +38,7 @@ final class AccountDeletionService
             $code = (string) random_int(10000000, 99999999);
             $hash = password_hash($code, PASSWORD_DEFAULT);
             $q = $this->db->prepare(
-                'INSERT INTO account_deletion_tokens(user_id,codigo_hash,solicitado_em,expira_em,tentativas,usado) VALUES(?,?,NOW(),DATE_ADD(NOW(),INTERVAL 10 MINUTE),0,0) ON DUPLICATE KEY UPDATE codigo_hash=VALUES(codigo_hash),solicitado_em=VALUES(solicitado_em),expira_em=VALUES(expira_em),tentativas=0,usado=0',
+                "INSERT INTO account_deletion_tokens(user_id,codigo_hash,solicitado_em,expira_em,tentativas,usado) VALUES(?,?,NOW(),NOW()+INTERVAL '10 minutes',0,0) ON CONFLICT (user_id) DO UPDATE SET codigo_hash=EXCLUDED.codigo_hash,solicitado_em=EXCLUDED.solicitado_em,expira_em=EXCLUDED.expira_em,tentativas=0,usado=0",
             );
             $q->execute([$id, $hash]);
             $this->db->commit();

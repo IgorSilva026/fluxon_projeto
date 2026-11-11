@@ -1,0 +1,3 @@
+Arquivos da versão MySQL, mantidos só como histórico.
+A aplicação agora usa PostgreSQL (Supabase): use database/schema.sql.
+Não execute estes scripts no Supabase.

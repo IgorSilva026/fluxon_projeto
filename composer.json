@@ -2,18 +2,20 @@
   "require": {
     "php": ">=8.1",
     "ext-pdo": "*",
-    "ext-pdo_mysql": "*",
+    "ext-pdo_pgsql": "*",
     "ext-curl": "*",
     "ext-openssl": "*",
     "phpmailer/phpmailer": "^7.0"
   },
   "scripts": {
+    "conexao": "@php tests/conexao.php",
     "test": [
       "@php tests/lint.php",
       "@php tests/profile_validation.php",
       "@php tests/password_validation.php",
       "@php tests/review_validation.php",
-      "@php tests/deletion_validation.php"
+      "@php tests/deletion_validation.php",
+      "@php tests/finance_validation.php"
     ]
   }
 }

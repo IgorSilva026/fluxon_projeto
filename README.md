@@ -1,58 +1,36 @@
 # Fluxon Analytics — Tesoureiro Digital
 
-Projeto acadêmico em PHP e MySQL para acesso, perfil e configurações iniciais de organização financeira.
+Projeto acadêmico de Análise e Desenvolvimento de Sistemas do Centro Universitário Piaget. O Fluxon ajuda a acompanhar movimentações, reservas e saldo disponível estimado em um ambiente financeiro simulado.
 
-## Funcionalidades
+## O que está disponível
 
-- Cadastro, login, Google OAuth, código por e-mail e recuperação de senha.
-- Perfil, foto privada, dados fiscais e preferências de notificações.
-- Troca de senha, avaliação, acessibilidade, ajuda, FAQ e informações do projeto.
-- Exclusão de conta com política de permanência, cancelamento e código por e-mail.
+- **Painel:** indicadores de saldo registrado, reservas ativas e disponível estimado, com gráficos e filtros.
+- **Cadastros e movimentações:** contas simuladas, categorias, regras de provisão, lançamentos manuais, importação fictícia sem duplicação e estorno.
+- **Extrato e relatórios:** consulta com filtros, ordenação e paginação; exportação em PDF e XLSX.
+- **Acesso e configurações:** cadastro, verificação por e-mail, código de acesso, recuperação de senha, Google OAuth opcional, perfil, foto, preferências, segurança, ajuda, avaliação e exclusão de conta.
+- **Interface:** visual compacto em todo o sistema, navegação compartilhada entre as telas financeiras e o perfil, opções de tema e tamanho de fonte.
 
-Fluxo de caixa, transações, automação de reserva fiscal, alertas financeiros e cobrança de assinatura ainda não estão integrados. O plano apresentado na interface é demonstrativo.
+## Rodar no XAMPP
 
-## Instalação
+Requisitos: PHP 8.1+, Apache, Composer e um projeto PostgreSQL no Supabase. Habilite no PHP as extensões `pdo_pgsql`, `pgsql`, `curl`, `openssl`, `gd`, `fileinfo`, `iconv` e `zip`. A extensão ZIP é usada na exportação XLSX.
 
-Requer PHP 8.1+, MySQL/MariaDB com InnoDB e Composer. Habilite PDO MySQL, cURL, OpenSSL, GD e Fileinfo no PHP do XAMPP. GD e Fileinfo são usados nas fotos.
+1. Coloque o projeto em `C:\xampp\htdocs\fluxon_projeto-main`. No terminal, dentro da pasta, rode `composer install`.
+2. **Banco novo:** no SQL Editor do Supabase, execute `database/schema.sql` e depois `database/migracao_fase3.sql`. **Banco PostgreSQL existente, antes da Fase 3:** execute somente `database/migracao_fase3.sql`. Se já aplicou essa migração e só quer atualizar o visual, pule este passo.
+3. Copie `.env.example` para `.env`. Preencha os parâmetros do banco exibidos em **Connect → Session pooler** e configure o SMTP para os fluxos por e-mail. Mantenha `APP_BASE_URL` igual ao endereço real do `index.php`. Como alternativa, use `config.local.example.php` como modelo para `config.local.php`.
+4. Inicie o Apache e abra [o Fluxon local](http://localhost/fluxon_projeto-main/index.php).
 
-1. Extraia a pasta `fluxon_projeto-main` em `C:\xampp\htdocs`.
-2. Na raiz do projeto, execute `composer install`.
-3. Para instalação nova, importe somente `database/schema.sql`. Ele inclui todas as tabelas desta entrega.
-4. Copie `config.local.example.php` para `config.local.php` e configure banco, URL, SMTP e Google, se utilizado.
-5. Inicie Apache e MySQL. Acesse `http://localhost/fluxon_projeto-main/index.php`.
+A autenticação é feita pelo Fluxon em PHP. O Supabase fornece o banco. Os dados do MySQL não são importados automaticamente; os scripts de `database/mysql_legado/` são apenas para a versão antiga.
 
-**Atualização de uma instalação existente:** preserve seu `config.local.php`, faça backup do banco e siga o [guia de configuração](GUIA_CONFIGURACAO.md). Não reimporte o schema nem repita migrações já aplicadas.
+## Testes e documentação
 
-O ZIP para GitHub não contém credenciais, banco de usuários, logs nem `vendor/`. Instale as dependências e mantenha a configuração privada apenas no ambiente local.
+Execute `composer test` para verificar a sintaxe e as regras de validação. Para testar o fluxo completo, use dados fictícios e siga [Instalação e demonstração da Fase 3](INSTALAR_FASE3.md).
 
-## Organização
+- [Requisitos da Fase 3](docs/FASE3_REQUISITOS.md)
+- [Validação da Fase 3](docs/FASE3_VALIDACAO.md)
+- [Integração do dashboard](INTEGRACAO_DASHBOARD.md)
 
-| Caminho                      | Responsabilidade                                            |
-| ---------------------------- | ----------------------------------------------------------- |
-| `index.php`                  | Entrada, utilitários compartilhados e rotas de autenticação |
-| `app/controllers/`           | Fluxos das áreas internas e verificações de sessão          |
-| `app/services/`              | Validação e regras de negócio                               |
-| `app/repositories/`          | Persistência de perfil e avaliação                          |
-| `app/views/`                 | Telas PHP/HTML                                              |
-| `assets/css/` e `assets/js/` | Estilos e comportamento no navegador                        |
-| `database/`                  | Schema completo e migrações existentes                      |
-| `tests/`                     | Verificação de sintaxe e validações sem banco               |
-| `docs/`                      | Revisão, lista de remoções e documentação histórica         |
+As reservas são virtuais. O Fluxon não conecta bancos reais, movimenta dinheiro, paga tributos ou envia notificações agendadas. O disponível estimado não considera obrigações futuras que ainda não foram registradas.
 
-As rotas continuam no formato `index.php?p=perfil`, `?p=painel`, etc. Não é necessário alterar links públicos por causa da reorganização interna.
+Mantenha `.env`, `config.local.php`, logs e `vendor/` fora do Git. O Apache deve aplicar as regras dos arquivos `.htaccess`.
 
-## Verificações
-
-```sh
-composer test
-```
-
-Os testes não enviam e-mails nem excluem contas. Os resultados desta revisão, os limites da validação e o roteiro manual estão em [docs/REVISAO.md](docs/REVISAO.md).
-
-## GitHub
-
-Versione o código, `composer.json`, `composer.lock`, testes e documentação. O `.gitignore` exclui configuração local, dependências, logs e arquivos temporários. Antes do commit, confira `git status` e `git diff --cached`.
-
-As proteções `.htaccess` exigem Apache com `AllowOverride` habilitado. Outro servidor precisa de regras equivalentes. O servidor embutido do PHP não aplica essas proteções.
-
-Equipe: Igor Silva, Jeferson Rios Pereira e Deric Fahr Diniz. Projeto acadêmico de Análise e Desenvolvimento de Sistemas do Centro Universitário Piaget.
+**Equipe:** Igor Silva, Jeferson Rios Pereira e Deric Fahr Diniz.

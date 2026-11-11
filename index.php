@@ -9,11 +9,12 @@ header('Cache-Control: no-store');
 header('Referrer-Policy: no-referrer');
 header('X-Content-Type-Options: nosniff');
 $C = require __DIR__ . '/config.php';
+// PostgreSQL (Supabase). Use a conexão "Session pooler" (porta 5432) ou a direta.
 $db = new PDO($C['db']['dsn'], $C['db']['user'], $C['db']['pass'], [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ]);
-$p = $_GET['p'] ?? 'splash';
+$p = is_string($_GET['p'] ?? null) ? $_GET['p'] : 'splash';
 $err = '';
 $POST = $_SERVER['REQUEST_METHOD'] === 'POST';
 
@@ -100,7 +101,7 @@ function token($uid, $tipo, $cod)
         'UPDATE tokens SET usado=1 WHERE user_id=? AND tipo=?',
     )->execute([$uid, $tipo]);
     $db->prepare(
-        'INSERT INTO tokens(user_id,tipo,hash,expira) VALUES(?,?,?,DATE_ADD(NOW(),INTERVAL ? MINUTE))',
+        'INSERT INTO tokens(user_id,tipo,hash,expira) VALUES(?,?,?,NOW()+make_interval(mins => ?::int))',
     )->execute([
         $uid,
         $tipo,
@@ -179,6 +180,7 @@ function view($t, $b)
             'avaliacao',
             'acessibilidade',
             'excluir-conta',
+            'painel', 'cadastros', 'extrato', 'movimentacao', 'perfil',
         ],
         true,
     );
@@ -188,6 +190,15 @@ function view($t, $b)
     }
     if ($p === 'avaliacao') {
         $styles[] = 'reviews';
+    }
+    if (in_array($p, ['painel', 'cadastros', 'extrato', 'movimentacao'], true)) {
+        $styles[] = 'finance';
+    }
+    if (in_array($p, ['painel', 'cadastros', 'extrato', 'movimentacao', 'perfil'], true)) {
+        $styles[] = 'dashboard';
+    }
+    if ($p === 'perfil') {
+        $styles[] = 'profile-dashboard';
     }
     require __DIR__ . '/app/views/layout.php';
     exit();
@@ -205,6 +216,49 @@ function card($t, $in)
     );
 }
 
+// Telas de autenticação ficam em html/*.html. O PHP só injeta CSRF, valores
+// digitados e o botão Google (quando configurado) e entrega pelo layout comum.
+function tela($nome, array $valores = [])
+{
+    global $C;
+    $arq = __DIR__ . '/html/' . $nome . '.html';
+    $html = is_file($arq) ? file_get_contents($arq) : false;
+    if ($html === false || !preg_match('~<body[^>]*>(.*)</body>~s', $html, $m)) {
+        error_log("Fluxon: template html/$nome.html ausente ou inválido.");
+        http_response_code(500);
+        exit('Tela indisponível.');
+    }
+    $titulo = 'Fluxon';
+    if (preg_match('~<title>(.*?)</title>~s', $html, $t)) {
+        $titulo = trim(
+            html_entity_decode(
+                preg_replace('~\s*·\s*Fluxon Analytics$~u', '', $t[1]),
+                ENT_QUOTES,
+                'UTF-8',
+            ),
+        );
+    }
+    $corpo = preg_replace_callback(
+        '~\{\{(csrf|valor:[a-z0-9_]+|google:[^}]+)\}\}~i',
+        function ($x) use ($valores, $C) {
+            $k = $x[1];
+            if ($k === 'csrf') {
+                return csrf();
+            }
+            if (str_starts_with($k, 'valor:')) {
+                return e($valores[substr($k, 6)] ?? '');
+            }
+            return $C['google']['id']
+                ? '<div class="divisor">ou</div><a class="btn sec" href="?p=google">' .
+                        e(substr($k, 7)) .
+                        '</a>'
+                : '';
+        },
+        $m[1],
+    );
+    return view($titulo, $corpo);
+}
+
 if ($p === 'excluir-conta') {
     require __DIR__ . '/app/controllers/delete_account.php';
     exit();
@@ -215,6 +269,10 @@ if (in_array($p, ['perfil', 'foto'], true)) {
 }
 
 $modulos = [
+    'painel' => 'finance.php',
+    'cadastros' => 'finance.php',
+    'extrato' => 'finance.php',
+    'movimentacao' => 'finance.php',
     'seguranca' => 'security.php',
     'suporte' => 'support.php',
     'faq' => 'support.php',
@@ -229,20 +287,10 @@ if (isset($modulos[$p])) {
 }
 switch ($p) {
     case 'splash':
-        view(
-            'Fluxon',
-            '<main class="splash"><div><div class="marca">Fluxon Analytics</div><p class="slogan">Sua tesouraria, no piloto automático.</p></div></main><script>setTimeout(()=>location="?p=inicio",1800)</script>',
-        );
+        tela('index');
 
     case 'inicio':
-        $g = $C['google']['id']
-            ? '<a class="btn sec" href="?p=google">Continuar com Google</a>'
-            : '';
-        card(
-            'Fluxon Analytics',
-            '<p>Sua tesouraria, no piloto automático.</p><a class="btn" href="?p=login">Entrar</a><a class="btn sec" href="?p=cadastro">Criar conta</a>' .
-                $g,
-        );
+        tela('inicio');
 
     case 'cadastro':
         if ($POST) {
@@ -263,27 +311,22 @@ switch ($p) {
                 if ($q->fetch()) {
                     $err = 'E-mail já cadastrado.';
                 } else {
-                    $db->prepare(
-                        'INSERT INTO users(nome,email,senha_hash) VALUES(?,?,?)',
-                    )->execute([$n, $m, password_hash($s, PASSWORD_DEFAULT)]);
+                    $ins = $db->prepare(
+                        'INSERT INTO users(nome,email,senha_hash) VALUES(?,?,?) RETURNING id',
+                    );
+                    $ins->execute([$n, $m, password_hash($s, PASSWORD_DEFAULT)]);
                     flash(
                         'ok',
                         'Cadastro recebido. Confirme seu e-mail para concluir o acesso.',
                     );
-                    inicia2fa($db->lastInsertId());
+                    inicia2fa((int) $ins->fetchColumn());
                 }
             }
         }
-        card(
-            'Criar conta',
-            form(
-                f('nome', 'Nome', 'text', $_POST['nome'] ?? '') .
-                    f('email', 'E-mail', 'email', $_POST['email'] ?? '') .
-                    f('senha', 'Senha', 'password') .
-                    f('senha2', 'Confirmar senha', 'password'),
-                'Cadastrar',
-            ) . '<p class="links"><a href="?p=login">Já tenho conta</a></p>',
-        );
+        tela('cadastro', [
+            'nome' => $_POST['nome'] ?? '',
+            'email' => $_POST['email'] ?? '',
+        ]);
 
     case 'login':
         if ($POST) {
@@ -305,7 +348,7 @@ switch ($p) {
             ) {
                 if ($u) {
                     $db->prepare(
-                        'UPDATE users SET tentativas=tentativas+1, bloqueado_ate=IF(tentativas>=5,DATE_ADD(NOW(),INTERVAL 15 MINUTE),NULL) WHERE id=?',
+                        "UPDATE users SET tentativas=tentativas+1, bloqueado_ate=CASE WHEN tentativas+1>=5 THEN NOW()+INTERVAL '15 minutes' ELSE NULL END WHERE id=?",
                     )->execute([$u['id']]);
                 }
                 $err = 'E-mail ou senha incorretos.';
@@ -316,18 +359,7 @@ switch ($p) {
                 inicia2fa($u['id']);
             }
         }
-        $g = $C['google']['id']
-            ? '<a class="btn sec" href="?p=google">Entrar com Google</a>'
-            : '';
-        card(
-            'Entrar',
-            form(
-                f('email', 'E-mail', 'email') . f('senha', 'Senha', 'password'),
-                'Entrar',
-            ) .
-                $g .
-                '<p class="links"><a href="?p=recuperar">Esqueci a senha</a> · <a href="?p=cadastro">Criar conta</a></p>',
-        );
+        tela('login');
 
     case '2fa':
         $uid = $_SESSION['pre'] ?? 0;
@@ -366,12 +398,7 @@ switch ($p) {
             }
             $err = 'Código inválido ou expirado.';
         }
-        card(
-            'Verificação em 2 etapas',
-            '<p>Enviamos um código de 6 dígitos para o seu e-mail.</p>' .
-                form(f('cod', 'Código', 'text'), 'Confirmar') .
-                '<p class="links"><a href="?p=login">Voltar</a></p>',
-        );
+        tela('verificacao');
 
     case 'recuperar':
         if ($POST) {
@@ -381,7 +408,7 @@ switch ($p) {
             $u = $q->fetch();
             if ($u) {
                 $limit = $db->prepare(
-                    'UPDATE users SET ultimo_reset=NOW() WHERE id=? AND (ultimo_reset IS NULL OR ultimo_reset < DATE_SUB(NOW(),INTERVAL 60 SECOND))',
+                    "UPDATE users SET ultimo_reset=NOW() WHERE id=? AND (ultimo_reset IS NULL OR ultimo_reset < NOW()-INTERVAL '60 seconds')",
                 );
                 $limit->execute([$u['id']]);
                 if ($limit->rowCount() === 1) {
@@ -397,11 +424,7 @@ switch ($p) {
             flash('ok', 'Se o e-mail existir, enviamos o link de recuperação.');
             go('recuperar');
         }
-        card(
-            'Recuperar senha',
-            form(f('email', 'E-mail cadastrado', 'email'), 'Enviar link') .
-                '<p class="links"><a href="?p=login">Voltar</a></p>',
-        );
+        tela('recuperar');
 
     case 'redefinir':
         $tk = $_GET['t'] ?? '';
@@ -440,14 +463,7 @@ switch ($p) {
                 go('login');
             }
         }
-        card(
-            'Nova senha',
-            form(
-                f('senha', 'Nova senha', 'password') .
-                    f('senha2', 'Confirmar senha', 'password'),
-                'Salvar',
-            ),
-        );
+        tela('redefinir');
 
     case 'google':
         if (!$C['google']['id']) {
@@ -504,41 +520,17 @@ switch ($p) {
                 $u['id'],
             ]);
         } else {
-            $db->prepare(
-                'INSERT INTO users(nome,email,google_id) VALUES(?,?,?)',
-            )->execute([
+            $ins = $db->prepare(
+                'INSERT INTO users(nome,email,google_id) VALUES(?,?,?) RETURNING id',
+            );
+            $ins->execute([
                 $i['name'] ?? 'Usuário',
                 strtolower($i['email']),
                 $i['sub'],
             ]);
-            $u = ['id' => $db->lastInsertId()];
+            $u = ['id' => (int) $ins->fetchColumn()];
         }
         inicia2fa($u['id']);
-
-    case 'painel':
-        if (empty($_SESSION['uid'])) {
-            go('login');
-        }
-        $q = $db->prepare(
-            'SELECT nome,email,email_verificado_em,versao_sessao FROM users WHERE id=?',
-        );
-        $q->execute([$_SESSION['uid']]);
-        $u = $q->fetch();
-        if (
-            !$u ||
-            !$u['email_verificado_em'] ||
-            (int) $u['versao_sessao'] !== ($_SESSION['versao_sessao'] ?? -1)
-        ) {
-            session_destroy();
-            go('login');
-        }
-        if ($POST) {
-            chk();
-            session_destroy();
-            header("Location: {$C['base']}?p=inicio");
-            exit();
-        }
-        require __DIR__ . '/app/views/dashboard_view.php';
 
     default:
         go('splash');

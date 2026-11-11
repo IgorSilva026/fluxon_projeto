@@ -18,7 +18,7 @@ final class ProfileRepository
             $q = $this->db->prepare('UPDATE users SET nome=? WHERE id=?');
             $q->execute([$v['nome'], $id]);
             $q = $this->db->prepare(
-                'INSERT INTO user_profiles(user_id,telefone,cidade,ocupacao,notif_app,notif_email,frequencia,horario) VALUES(?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE telefone=VALUES(telefone),cidade=VALUES(cidade),ocupacao=VALUES(ocupacao),notif_app=VALUES(notif_app),notif_email=VALUES(notif_email),frequencia=VALUES(frequencia),horario=VALUES(horario)',
+                'INSERT INTO user_profiles(user_id,telefone,cidade,ocupacao,notif_app,notif_email,frequencia,horario) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT (user_id) DO UPDATE SET telefone=EXCLUDED.telefone,cidade=EXCLUDED.cidade,ocupacao=EXCLUDED.ocupacao,notif_app=EXCLUDED.notif_app,notif_email=EXCLUDED.notif_email,frequencia=EXCLUDED.frequencia,horario=EXCLUDED.horario',
             );
             $q->execute([
                 $id,
@@ -46,11 +46,15 @@ final class ProfileRepository
                 $q = $this->db->prepare(
                     'UPDATE user_profiles SET foto=?,foto_mime=? WHERE user_id=?',
                 );
-                $q->execute([
+                // bytea exige PARAM_LOB, senão o binário é tratado como texto.
+                $q->bindValue(
+                    1,
                     $remove ? null : $photo,
-                    $remove ? null : 'image/jpeg',
-                    $id,
-                ]);
+                    $remove ? PDO::PARAM_NULL : PDO::PARAM_LOB,
+                );
+                $q->bindValue(2, $remove ? null : 'image/jpeg');
+                $q->bindValue(3, $id, PDO::PARAM_INT);
+                $q->execute();
             }
             $this->db->commit();
         } catch (Throwable $e) {
@@ -65,6 +69,10 @@ final class ProfileRepository
         );
         $q->execute([$id]);
         $v = $q->fetchColumn();
-        return is_string($v) ? $v : null;
+        // No PDO pgsql o bytea chega como stream.
+        if (is_resource($v)) {
+            $v = stream_get_contents($v);
+        }
+        return is_string($v) && $v !== '' ? $v : null;
     }
 }

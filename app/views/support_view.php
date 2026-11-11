@@ -217,7 +217,7 @@ ob_start(); ?>
         O MVP proposto utiliza reservas virtuais para
         planejamento; elas não bloqueiam ou transferem
         dinheiro e não quitam tributos.
-        O valor disponível será uma estimativa,
+        O valor disponível é uma estimativa,
         não uma apuração de lucro ou tributos.
     </p>
 </details>
@@ -241,13 +241,13 @@ ob_start(); ?>
     <dd>Fluxon Analytics — Tesoureiro Digital</dd>
 
     <dt><strong>Versão desta entrega</strong></dt>
-    <dd>0.3.0 acadêmica — Perfil, Segurança e Suporte</dd>
+    <dd>0.4.0 acadêmica — Módulo financeiro da Fase 3</dd>
 
     <dt><strong>Finalidade</strong></dt>
     <dd>
         Apoiar a organização financeira de autônomos
         e pequenos negócios. Esta entrega oferece
-        acesso, perfil e configurações iniciais.
+        acesso, perfil, contas simuladas, movimentações, reservas, painel e relatórios PDF/XLSX.
     </dd>
 
     <dt>
@@ -269,7 +269,7 @@ ob_start(); ?>
 
     <dt><strong>Distribuição</strong></dt>
     <dd>
-        Aplicação Web acadêmica em PHP e MySQL,
+        Aplicação Web acadêmica em PHP e PostgreSQL (Supabase),
         executada em servidor compatível.
         Não é um aplicativo distribuído por loja.
     </dd>

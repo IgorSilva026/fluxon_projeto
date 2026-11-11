@@ -7,8 +7,6 @@ $types = [
     'real' => 'PJ — Lucro Real',
 ];
 
-$initials = strtoupper(substr($data['nome'], 0, 1));
-
 function toggleSetting($key, $title, $description, $data)
 {
     ?>
@@ -26,67 +24,12 @@ function toggleSetting($key, $title, $description, $data)
 ob_start();
 ?>
 
-<link rel="stylesheet" href="assets/css/settings.css">
-
-<div class="settings-shell">
-    <aside class="sidebar">
-        <a class="brand" href="?p=painel">
-            <b>F</b> FLUXON
-        </a>
-
-        <nav aria-label="Menu principal">
-            <a href="?p=painel">
-                ⊞ &nbsp; Dashboard
-            </a>
-
-            <span>
-                ↕ &nbsp; Fluxo de Caixa
-                <small>Em breve</small>
-            </span>
-
-            <span>
-                ◎ &nbsp; Reserva Fiscal
-                <small>Em breve</small>
-            </span>
-
-            <span>
-                ≡ &nbsp; Transações
-                <small>Em breve</small>
-            </span>
-
-            <a class="active" href="?p=perfil" aria-current="page">
-                ⚙ &nbsp; Configurações
-            </a>
-        </nav>
-
-        <div class="sidebar-user">
-            <b><?= e($initials) ?></b>
-
-            <span>
-                <?= e($data['nome']) ?>
-                <small>
-                    <?= e($data['ocupacao'] ?: 'Minha conta') ?>
-                </small>
-            </span>
-        </div>
-    </aside>
-
-    <div class="workspace">
-        <header class="topbar">
-            <h1>Configurações</h1>
-
-            <div>
-                <a href="#notificacoes" aria-label="Preferências de notificações">
-                    ♧
-                </a>
-
-                <a class="mini-avatar" href="#perfil" aria-label="Seu perfil">
-                    <?= e($initials) ?>
-                </a>
-            </div>
-        </header>
-
-        <main class="settings-content">
+<?php
+$shellName = $data['nome'];
+$shellTitle = 'Configurações';
+require __DIR__ . '/dashboard_header.php';
+?>
+        <main class="dashboard-content profile-content">
             <form method="post" enctype="multipart/form-data">
                 <input type="hidden" name="csrf" value="<?= e(csrf()) ?>">
 
@@ -97,7 +40,7 @@ ob_start();
                         <?php if ($data['tem_foto']): ?>
                         <img src="?p=foto" alt="Sua foto" width="48" height="48">
                         <?php else: ?>
-                        <b><?= e($initials) ?></b>
+                        <b><?= e($shellInitial) ?></b>
                         <?php endif; ?>
 
                         <div>
@@ -208,18 +151,18 @@ ob_start();
                     </label>
 
                     <small>
-                        Valor de referência para a reserva de cada receita.
+                        Referência fiscal do perfil. Não determina o cálculo das regras financeiras.
                     </small>
 
                     <?php toggleSetting(
                         'reserva_auto',
-                        'Separação automática de reserva',
-                        'Reservar a alíquota definida em cada entrada.',
+                        'Preferência de reserva automática',
+                        'Preferência do perfil; o cálculo usa as regras cadastradas no módulo financeiro.',
                         $data,
                     ); ?>
 
                     <small class="note">
-                        A automação depende da integração com o módulo financeiro.
+                        Para aplicar percentuais às entradas, configure <a href="?p=cadastros&amp;grupo=regras">Regras de provisão</a>. As regras financeiras são independentes desta referência fiscal.
                     </small>
 
                     <button class="save" type="submit">
@@ -325,10 +268,10 @@ ob_start();
                     </p>
                 </section>
             </form>
-            <section class="settings-card" style="margin-top:16px">
+            <section class="settings-card">
                 <h2>Outras configurações</h2>
 
-                <nav aria-label="Outras configurações" style="display:grid;gap:14px;font-size:14px">
+                <nav aria-label="Outras configurações" class="profile-links">
                     <a href="?p=seguranca">Segurança e senha</a>
                     <a href="?p=suporte">Ajuda e contato</a>
                     <a href="?p=faq">Perguntas frequentes</a>
@@ -337,8 +280,8 @@ ob_start();
                     <a href="?p=acessibilidade">Acessibilidade</a>
                 </nav>
             </section>
-            <section class="settings-card" style="margin-top:16px">
-                <h2 style="color:#a32020">Exclusão de conta</h2>
+            <section class="settings-card">
+                <h2>Exclusão de conta</h2>
 
                 <p>
                     Manter sua conta preserva seu perfil, sua foto,
@@ -351,8 +294,7 @@ ob_start();
                     Clicar abaixo não exclui sua conta.
                 </p>
 
-                <a class="save" href="?p=excluir-conta"
-                    style="display:inline-block;text-decoration:none;background:#a32020;color:#fff">
+                <a class="save profile-danger" href="?p=excluir-conta">
                     Revisar opções de exclusão
                 </a>
             </section>
