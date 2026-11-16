@@ -1,0 +1,17 @@
+.profile-content .identity {display:flex;align-items:center;gap:16px;margin:16px 0}
+.profile-content .identity > b,
+.profile-content .identity > img {display:grid;place-items:center;width:60px;height:60px;flex-shrink:0;border-radius:12px;object-fit:cover;background:#173f40;color:#c7ff38}
+.profile-content .identity > div {min-width:0;overflow-wrap:anywhere}
+.profile-content small {display:block;margin-top:4px;color:var(--texto)}
+.profile-content .fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.profile-content select {display:block;width:100%;margin-top:6px;padding:12px;border:1px solid var(--linha);border-radius:8px}
+.profile-content details {margin-top:16px}
+.profile-content summary {cursor:pointer}
+.profile-content .setting-row,.profile-content .check {display:flex;align-items:center;gap:12px}
+.profile-content .setting-row {justify-content:space-between;border-top:1px solid var(--linha);padding-top:14px}
+.profile-content input[type=checkbox] {width:20px;height:20px;flex-shrink:0;accent-color:#28706d;margin:0}
+.profile-content .save,.profile-content .plan button {display:inline-block;border:0;border-radius:9px;background:#173f40;color:#c7ff38;padding:12px 16px;font:inherit;font-weight:700;text-decoration:none;cursor:pointer;margin-top:16px}
+.profile-content .profile-danger {background:#a32020;color:#fff}
+.profile-content .badge {float:right;background:#c7ff38;color:#173f40;border-radius:16px;padding:4px 10px;font-weight:700}
+.profile-content .profile-links {display:flex;flex-wrap:wrap;gap:12px 24px}
+@media(max-width:850px){.profile-content .fields {grid-template-columns:1fr}}

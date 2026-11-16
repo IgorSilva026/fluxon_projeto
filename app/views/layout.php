@@ -7,6 +7,7 @@
     <?php foreach ($styles as $style): ?>
         <link rel="stylesheet" href="assets/css/<?= e($style) ?>.css">
     <?php endforeach; ?>
+    <link rel="stylesheet" href="assets/css/compact.css">
     <script src="assets/js/accessibility.js"></script>
 </head>
 <body class="<?= $wide ? 'fluxon-wide' : '' ?>">

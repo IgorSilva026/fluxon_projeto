@@ -1,3 +1,5 @@
+> Instale também a migração financeira e confira [INSTALAR_FASE3.md](INSTALAR_FASE3.md).
+
 # Configuração e atualização
 
 ## Instalação nova
