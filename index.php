@@ -15,7 +15,7 @@ $db = new PDO($C['db']['dsn'], $C['db']['user'], $C['db']['pass'], [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ]);
-$p = $_GET['p'] ?? 'splash';
+$p = is_string($_GET['p'] ?? null) ? $_GET['p'] : 'splash';
 $err = '';
 $POST = $_SERVER['REQUEST_METHOD'] === 'POST';
 
@@ -181,15 +181,28 @@ function view($t, $b)
             'avaliacao',
             'acessibilidade',
             'excluir-conta',
+            'painel', 'cadastros', 'extrato', 'movimentacao', 'perfil',
         ],
         true,
     );
-    $styles = ['style', 'layout', 'password', 'accessibility'];
+    $styles = ['style', 'layout', 'accessibility'];
     if (in_array($p, ['suporte', 'faq', 'sobre'], true)) {
         $styles[] = 'support';
     }
     if ($p === 'avaliacao') {
         $styles[] = 'reviews';
+    }
+    if (in_array($p, ['painel', 'cadastros', 'extrato', 'movimentacao'], true)) {
+        $styles[] = 'finance';
+    }
+    if (in_array($p, ['painel', 'cadastros', 'extrato', 'movimentacao', 'perfil'], true)) {
+        $styles[] = 'dashboard';
+    }
+    if ($p === 'painel') {
+        $styles[] = 'painel';
+    }
+    if ($p === 'perfil') {
+        $styles[] = 'profile-dashboard';
     }
     require __DIR__ . '/app/views/layout.php';
     exit();
@@ -260,13 +273,16 @@ if (in_array($p, ['perfil', 'foto'], true)) {
 }
 
 $modulos = [
+    'painel' => 'finance.php',
+    'cadastros' => 'finance.php',
+    'extrato' => 'finance.php',
+    'movimentacao' => 'finance.php',
     'seguranca' => 'security.php',
     'suporte' => 'support.php',
     'faq' => 'support.php',
     'sobre' => 'support.php',
     'avaliacao' => 'reviews.php',
     'acessibilidade' => 'accessibility.php',
-    'transacoes' => 'transactions.php',
 ];
 
 if (isset($modulos[$p])) {
@@ -519,31 +535,6 @@ switch ($p) {
             $u = ['id' => (int) $ins->fetchColumn()];
         }
         inicia2fa($u['id']);
-
-    case 'painel':
-        if (empty($_SESSION['uid'])) {
-            go('login');
-        }
-        $q = $db->prepare(
-            'SELECT nome,email,email_verificado_em,versao_sessao FROM users WHERE id=?',
-        );
-        $q->execute([$_SESSION['uid']]);
-        $u = $q->fetch();
-        if (
-            !$u ||
-            !$u['email_verificado_em'] ||
-            (int) $u['versao_sessao'] !== ($_SESSION['versao_sessao'] ?? -1)
-        ) {
-            session_destroy();
-            go('login');
-        }
-        if ($POST) {
-            chk();
-            session_destroy();
-            header("Location: {$C['base']}?p=inicio");
-            exit();
-        }
-        require __DIR__ . '/app/controllers/dashboard.php';
 
     default:
         go('splash');

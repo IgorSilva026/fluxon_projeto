@@ -1,401 +1,13 @@
-body {
-  display: block;
-  padding: 0;
-  background: #f7f7f3;
-  color: #17242c;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
-}
-body > .col {
-  display: block;
-  width: 100%;
-}
-body > .col > .ok,
-body > .col > .err {
-  position: relative;
-  margin: 12px 24px 12px 220px;
-}
-a {
-  color: inherit;
-}
-.settings-shell {
-  min-height: 100vh;
-}
-.sidebar {
-  width: 196px;
-  background: #173f40;
-  position: fixed;
-  inset: 0 auto 0 0;
-  color: #9cbbc0;
-  display: flex;
-  flex-direction: column;
-}
-.brand {
-  height: 66px;
-  border-bottom: 1px solid #ffffff16;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 22px;
-  text-decoration: none;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: #c7ff38;
-  font-weight: bold;
-}
-.brand b,
-.sidebar-user > b {
-  display: grid;
-  place-items: center;
-  background: #c7ff38;
-  color: #173f40;
-  border-radius: 6px;
-  width: 25px;
-  height: 25px;
-}
-.sidebar nav {
-  padding: 16px 12px;
-}
-.sidebar nav > a,
-.sidebar nav > span {
-  display: block;
-  padding: 12px 14px;
-  margin-bottom: 3px;
-  text-decoration: none;
-  font-size: 11px;
-  border-radius: 9px;
-}
-.sidebar nav > span small {
-  display: inline;
-  color: #b3c9ca;
-  font-size: 9px;
-}
-.sidebar nav .active {
-  color: #c7ff38;
-  background: #2a5544;
-  border-left: 2px solid #c7ff38;
-  font-weight: bold;
-}
-.sidebar-user {
-  margin: auto 10px 12px;
-  background: #224b4d;
-  border-radius: 12px;
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #fff;
-}
-.sidebar-user span {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.sidebar-user small {
-  font-size: 10px;
-  color: #9cbbc0;
-}
-.workspace {
-  margin-left: 196px;
-}
-.topbar {
-  height: 60px;
-  border-bottom: 1px solid #deded7;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 24px;
-}
-.topbar h1 {
-  font-size: 16px;
-  margin: 0;
-  color: #17242c;
-}
-.topbar > div {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.topbar a {
-  text-decoration: none;
-  padding: 9px;
-  border: 1px solid #deded7;
-  border-radius: 9px;
-}
-.topbar .mini-avatar {
-  background: #173f40;
-  color: #c7ff38;
-  font-weight: bold;
-  border: 0;
-}
-.settings-content {
-  padding: 12px 24px 30px;
-  max-width: 552px;
-}
-.settings-card {
-  border: 1px solid #deded7;
-  background: white;
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 12px;
-}
-.settings-card h2 {
-  font-size: 11px;
-  margin: 0 0 16px;
-  font-weight: 600;
-}
-.identity {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.identity > b,
-.identity > img {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: #173f40;
-  color: #c7ff38;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  object-fit: cover;
-}
-.identity strong {
-  font-size: 12px;
-  font-weight: 500;
-}
-small {
-  font-size: 10px;
-  line-height: 1.5;
-  color: #87909e;
-  margin-top: 0;
-}
-.fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.settings-card label {
-  font-weight: 400;
-  font-size: 10px;
-  color: #87909e;
-  margin: 0;
-}
-.settings-card input:not([type='checkbox']),
-.settings-card select {
-  width: 100%;
-  font-family: inherit;
-  font-size: 11px;
-  color: #17242c;
-  background: #f7f7f3;
-  border: 1px solid #deded7;
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-top: 5px;
-  min-height: 36px;
-}
-.save {
-  border: 0;
-  border-radius: 9px;
-  padding: 10px 15px;
-  background: #173f40;
-  color: #c7ff38;
-  font-size: 11px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 12px;
-}
-.rate {
-  display: block;
-  max-width: 240px;
-}
-.rate + small {
-  margin-top: 4px;
-}
-.settings-card .setting-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  border-top: 1px solid #e9e9e3;
-  margin-top: 12px;
-  padding: 12px 0 4px;
-  color: #17242c;
-}
-.setting-row strong {
-  font-weight: 400;
-  font-size: 11px;
-}
-.setting-row small {
-  display: block;
-}
-.switch {
-  appearance: none;
-  flex-shrink: 0;
-  position: relative;
-  width: 36px;
-  height: 18px;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  border-radius: 20px;
-  background: #a5acac;
-  cursor: pointer;
-}
-.switch:after {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 10px;
-  height: 10px;
-  background: white;
-  border-radius: 50%;
-  transition: transform 0.15s;
-}
-.switch:checked {
-  background: #173f40;
-}
-.switch:checked:after {
-  transform: translateX(18px);
-}
-.switch:checked:before {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 6px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #c7ff38;
-}
-details {
-  margin-top: 12px;
-}
-summary {
-  font-size: 10px;
-  color: #526b6c;
-  cursor: pointer;
-}
-details > .fields {
-  margin-top: 12px;
-}
-details > label {
-  display: block;
-  margin-top: 12px !important;
-}
-.note {
-  font-size: 9px;
-  margin-top: 8px;
-}
-.plan {
-  background: #173f40;
-  color: white;
-  border-radius: 12px;
-  padding: 18px;
-  position: relative;
-  overflow: hidden;
-}
-.plan h2 {
-  font-size: 16px;
-  margin: 3px 0 10px;
-}
-.plan p {
-  font-size: 11px;
-  color: #a5bec1;
-}
-.plan button {
-  background: transparent;
-  color: white;
-  border: 1px solid #668181;
-  border-radius: 8px;
-  padding: 9px 15px;
-  font-size: 11px;
-  cursor: pointer;
-}
-.badge {
-  float: right;
-  background: #c7ff38;
-  color: #173f40;
-  font-size: 10px;
-  border-radius: 20px;
-  padding: 4px 10px;
-}
-.logout {
-  display: inline-block;
-  margin-top: 16px;
-  font-size: 11px;
-}
-button:focus-visible,
-summary:focus-visible {
-  outline: 3px solid #9b6700;
-  outline-offset: 3px;
-}
-@media (min-width: 1400px) {
-  .sidebar {
-    width: 175px;
-  }
-  .workspace {
-    margin-left: 175px;
-  }
-  .settings-content {
-    max-width: 493px;
-    padding-left: 21px;
-    padding-right: 24px;
-  }
-  .topbar {
-    height: 54px;
-    padding-left: 21px;
-  }
-  .settings-card {
-    padding: 16px;
-  }
-}
-@media (max-width: 650px) {
-  .sidebar {
-    position: relative;
-    width: 100%;
-  }
-  .brand {
-    height: 52px;
-  }
-  .sidebar nav {
-    display: flex;
-    overflow: auto;
-    padding: 6px;
-  }
-  .sidebar nav > a,
-  .sidebar nav > span {
-    white-space: nowrap;
-    padding: 10px;
-  }
-  .sidebar nav > span {
-    display: none;
-  }
-  .sidebar-user {
-    display: none;
-  }
-  .workspace {
-    margin-left: 0;
-  }
-  .settings-content {
-    padding: 14px;
-    max-width: 100%;
-  }
-  .topbar {
-    padding: 0 14px;
-  }
-  .fields {
-    grid-template-columns: 1fr;
-  }
-  body > .col > .ok,
-  body > .col > .err {
-    margin: 12px;
-  }
-}
 
-/* Mantém o layout estável com ou sem mensagem */
+/* ================================================
+   FLUXON — SETTINGS
+   Configurações da conta e preferências do usuário
+================================================ */
+
+/* ================================================
+   01. BASE DO LAYOUT
+================================================ */
+
 html {
   scrollbar-gutter: stable;
 }
@@ -405,6 +17,12 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
+
+  background: #f7f7f3;
+  color: #17242c;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
 }
 
 body > .col {
@@ -416,17 +34,624 @@ body > .col {
 
 .settings-shell {
   width: 100%;
+  min-height: 100vh;
 }
 
-/* Exibe o aviso sem empurrar a página */
+/* ================================================
+   02. MENSAGENS E FEEDBACK
+================================================ */
+
 body > .col > .ok,
 body > .col > .err {
   position: fixed;
   top: 12px;
   right: 16px;
   z-index: 1000;
+
   width: min(400px, calc(100% - 32px));
   margin: 0 !important;
   padding: 12px 16px;
+
   box-shadow: 0 4px 16px #0002;
+}
+
+/* ================================================
+   03. SIDEBAR
+================================================ */
+
+.settings-shell .sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 196px;
+
+  color: #9cbbc0;
+  background: #173f40;
+}
+
+/* Marca */
+
+.settings-shell .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  height: 66px;
+  padding: 22px;
+
+  color: #c7ff38;
+  border-bottom: 1px solid #ffffff16;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+
+.settings-shell .brand b,
+.settings-shell .sidebar-user > b {
+  display: grid;
+  place-items: center;
+
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+
+  color: #173f40;
+  background: #c7ff38;
+  border-radius: 6px;
+}
+
+/* Navegação */
+
+.settings-shell .sidebar nav {
+  padding: 16px 12px;
+}
+
+.settings-shell .sidebar nav > a,
+.settings-shell .sidebar nav > span {
+  display: block;
+
+  margin-bottom: 3px;
+  padding: 12px 14px;
+
+  border-radius: 9px;
+
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.settings-shell .sidebar nav > span small {
+  display: inline;
+  color: #b3c9ca;
+  font-size: 9px;
+}
+
+.settings-shell .sidebar nav > a.active {
+  color: #c7ff38;
+  background: #2a5544;
+
+  border-left: 2px solid #c7ff38;
+
+  font-weight: 700;
+}
+
+/* Usuário */
+
+.settings-shell .sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: auto 10px 12px;
+  padding: 12px;
+
+  color: #fff;
+  background: #224b4d;
+  border-radius: 12px;
+}
+
+.settings-shell .sidebar-user span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.settings-shell .sidebar-user small {
+  color: #9cbbc0;
+  font-size: 10px;
+}
+
+/* ================================================
+   04. ÁREA DE TRABALHO
+================================================ */
+
+.settings-shell .workspace {
+  min-width: 0;
+  margin-left: 196px;
+}
+
+/* Barra superior */
+
+.settings-shell .topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 60px;
+  padding: 0 24px;
+
+  border-bottom: 1px solid #deded7;
+}
+
+.settings-shell .topbar h1 {
+  margin: 0;
+  color: #17242c;
+  font-size: 16px;
+}
+
+.settings-shell .topbar > div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.settings-shell .topbar a {
+  padding: 9px;
+
+  color: inherit;
+  border: 1px solid #deded7;
+  border-radius: 9px;
+
+  text-decoration: none;
+}
+
+.settings-shell .topbar .mini-avatar {
+  color: #c7ff38;
+  background: #173f40;
+  border: 0;
+  font-weight: 700;
+}
+
+/* ================================================
+   05. CONTEÚDO
+================================================ */
+
+.settings-shell .settings-content {
+  width: 100%;
+  max-width: 552px;
+
+  padding: 12px 24px 30px;
+}
+
+/* Cards */
+
+.settings-shell .settings-card {
+  margin-bottom: 12px;
+  padding: 18px;
+
+  background: #fff;
+  border: 1px solid #deded7;
+  border-radius: 12px;
+}
+
+.settings-shell .settings-card h2 {
+  margin: 0 0 16px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ================================================
+   06. IDENTIDADE
+================================================ */
+
+.settings-shell .identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 16px;
+}
+
+.settings-shell .identity > b,
+.settings-shell .identity > img {
+  display: grid;
+  place-items: center;
+
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+
+  color: #c7ff38;
+  background: #173f40;
+  border-radius: 12px;
+
+  font-size: 16px;
+  object-fit: cover;
+}
+
+.settings-shell .identity strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ================================================
+   07. FORMULÁRIOS
+================================================ */
+
+.settings-shell .fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.settings-shell .settings-card label {
+  margin: 0;
+
+  color: #87909e;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.settings-shell small {
+  color: #87909e;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.settings-shell .settings-card input:not([type="checkbox"]),
+.settings-shell .settings-card select {
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+
+  margin-top: 5px;
+  padding: 10px 12px;
+
+  color: #17242c;
+  background: #f7f7f3;
+
+  border: 1px solid #deded7;
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.settings-shell .settings-card input:focus-visible,
+.settings-shell .settings-card select:focus-visible {
+  outline: 3px solid #9b6700;
+  outline-offset: 2px;
+}
+
+/* Botão salvar */
+
+.settings-shell .save {
+  margin-top: 12px;
+  padding: 10px 15px;
+
+  color: #c7ff38;
+  background: #173f40;
+
+  border: 0;
+  border-radius: 9px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.settings-shell .save:hover {
+  background: #245657;
+}
+
+/* Campo de avaliação */
+
+.settings-shell .rate {
+  display: block;
+  max-width: 240px;
+}
+
+.settings-shell .rate + small {
+  display: block;
+  margin-top: 4px;
+}
+
+/* ================================================
+   08. PREFERÊNCIAS E CONFIGURAÇÕES
+================================================ */
+
+.settings-shell .settings-card .setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-top: 12px;
+  padding: 12px 0 4px;
+
+  color: #17242c;
+  border-top: 1px solid #e9e9e3;
+}
+
+.settings-shell .setting-row strong {
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.settings-shell .setting-row small {
+  display: block;
+}
+
+/* Switch */
+
+.settings-shell .switch {
+  position: relative;
+  appearance: none;
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+
+  background: #a5acac;
+  border: 0;
+  border-radius: 20px;
+
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+
+.settings-shell .switch::after {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+
+  width: 10px;
+  height: 10px;
+
+  content: "";
+
+  background: #fff;
+  border-radius: 50%;
+
+  transition: transform 180ms ease;
+}
+
+.settings-shell .switch:checked {
+  background: #173f40;
+}
+
+.settings-shell .switch:checked::after {
+  transform: translateX(18px);
+}
+
+.settings-shell .switch:checked::before {
+  position: absolute;
+  top: 6px;
+  left: 5px;
+
+  width: 6px;
+  height: 6px;
+
+  content: "";
+
+  background: #c7ff38;
+  border-radius: 50%;
+}
+
+/* ================================================
+   09. DETALHES E INFORMAÇÕES
+================================================ */
+
+.settings-shell details {
+  margin-top: 12px;
+}
+
+.settings-shell summary {
+  color: #526b6c;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.settings-shell details > .fields {
+  margin-top: 12px;
+}
+
+.settings-shell details > label {
+  display: block;
+  margin-top: 12px !important;
+}
+
+.settings-shell .note {
+  margin-top: 8px;
+  font-size: 9px;
+}
+
+/* ================================================
+   10. PLANO
+================================================ */
+
+.settings-shell .plan {
+  position: relative;
+  overflow: hidden;
+
+  padding: 18px;
+
+  color: #fff;
+  background: #173f40;
+  border-radius: 12px;
+}
+
+.settings-shell .plan h2 {
+  margin: 3px 0 10px;
+  font-size: 16px;
+}
+
+.settings-shell .plan p {
+  color: #a5bec1;
+  font-size: 11px;
+}
+
+.settings-shell .plan button {
+  padding: 9px 15px;
+
+  color: #fff;
+  background: transparent;
+
+  border: 1px solid #668181;
+  border-radius: 8px;
+
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.settings-shell .plan button:hover {
+  background: #ffffff12;
+}
+
+/* Plano atual */
+
+.settings-shell .badge {
+  float: right;
+
+  padding: 4px 10px;
+
+  color: #173f40;
+  background: #c7ff38;
+
+  border-radius: 20px;
+
+  font-size: 10px;
+}
+
+/* ================================================
+   11. SAIR DA CONTA
+================================================ */
+
+.settings-shell .logout {
+  display: inline-block;
+  margin-top: 16px;
+
+  font-size: 11px;
+}
+
+/* ================================================
+   12. ACESSIBILIDADE
+================================================ */
+
+.settings-shell button:focus-visible,
+.settings-shell summary:focus-visible,
+.settings-shell a:focus-visible,
+.settings-shell input:focus-visible,
+.settings-shell select:focus-visible {
+  outline: 3px solid #9b6700;
+  outline-offset: 3px;
+}
+
+/* ================================================
+   13. TELAS GRANDES
+================================================ */
+
+@media (min-width: 1400px) {
+  .settings-shell .sidebar {
+    width: 175px;
+  }
+
+  .settings-shell .workspace {
+    margin-left: 175px;
+  }
+
+  .settings-shell .settings-content {
+    max-width: 493px;
+    padding-right: 24px;
+    padding-left: 21px;
+  }
+
+  .settings-shell .topbar {
+    height: 54px;
+    padding-left: 21px;
+  }
+
+  .settings-shell .settings-card {
+    padding: 16px;
+  }
+}
+
+/* ================================================
+   14. TABLETS E CELULARES
+================================================ */
+
+@media (max-width: 650px) {
+  .settings-shell .sidebar {
+    position: relative;
+    width: 100%;
+  }
+
+  .settings-shell .brand {
+    height: 52px;
+  }
+
+  .settings-shell .sidebar nav {
+    display: flex;
+    overflow-x: auto;
+    padding: 6px;
+
+    scrollbar-width: thin;
+  }
+
+  .settings-shell .sidebar nav > a,
+  .settings-shell .sidebar nav > span {
+    flex-shrink: 0;
+    padding: 10px;
+    white-space: nowrap;
+  }
+
+  .settings-shell .sidebar nav > span {
+    display: none;
+  }
+
+  .settings-shell .sidebar-user {
+    display: none;
+  }
+
+  .settings-shell .workspace {
+    margin-left: 0;
+  }
+
+  .settings-shell .settings-content {
+    max-width: 100%;
+    padding: 14px;
+  }
+
+  .settings-shell .topbar {
+    padding: 0 14px;
+  }
+
+  .settings-shell .fields {
+    grid-template-columns: 1fr;
+  }
+
+  body > .col > .ok,
+  body > .col > .err {
+    right: 12px;
+    width: calc(100% - 24px);
+  }
+}
+
+/* ================================================
+   15. REDUÇÃO DE MOVIMENTO
+================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-shell .switch,
+  .settings-shell .switch::after {
+    transition: none;
+  }
 }

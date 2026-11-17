@@ -1,0 +1,50 @@
+
+/* ================================================
+   FLUXON — COMPACT SYSTEM
+   Densidade visual e espaçamentos globais
+================================================ */
+
+/* ================================================
+   01. ESCALA TIPOGRÁFICA
+================================================ */
+
+body {
+  font-size: calc(15px * var(--texto-escala, 1));
+}
+
+h1 {
+  font-size: calc(22px * var(--texto-escala, 1));
+}
+
+h2 {
+  margin-block: 0 10px;
+  font-size: calc(18px * var(--texto-escala, 1));
+}
+
+/* ================================================
+   02. ESPAÇAMENTOS
+================================================ */
+
+.links,
+.divisor {
+  margin-top: 12px;
+}
+
+/* ================================================
+   03. TELA INICIAL
+================================================ */
+
+.splash .marca {
+  font-size: clamp(28px, 7vw, 46px);
+}
+
+/* ================================================
+   04. DENSIDADE DE CONTEÚDO
+================================================ */
+
+.card p,
+.card li,
+.card dd {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}

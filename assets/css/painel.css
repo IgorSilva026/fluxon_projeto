@@ -1,0 +1,725 @@
+
+/* ================================================
+   FLUXON — MAIN PANEL
+   Dashboard principal e componentes visuais
+================================================ */
+
+/* ================================================
+   01. CONFIGURAÇÕES
+================================================ */
+
+.dashboard-content.pn {
+  display: block;
+}
+
+.pn {
+  --pn-borda: color-mix(in srgb, var(--linha) 40%, var(--campo));
+  --pn-teal: #3f8f98;
+  --pn-pos: #1f7a45;
+  --pn-lime: #c7ff38;
+}
+
+:root[data-tema="escuro"] .pn {
+  --pn-pos: #7ee0a3;
+}
+
+/* ================================================
+   02. TIPOGRAFIA E ACESSIBILIDADE
+================================================ */
+
+.pn .pn-lbl {
+  display: block;
+  font-size: calc(12px * var(--texto-escala));
+}
+
+.pn .pn-muted,
+.pn .pn-mut {
+  color: color-mix(in srgb, var(--texto) 68%, var(--campo));
+}
+
+.pn-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ================================================
+   03. AVISOS
+================================================ */
+
+.pn-notice {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+
+  background: var(--campo);
+
+  border: 1px solid var(--pn-borda);
+  border-inline-start: 4px solid var(--pn-teal);
+  border-radius: 10px;
+}
+
+.pn-alert {
+  margin: 0 0 14px;
+}
+
+/* ================================================
+   04. CONTROLES E BOTÕES
+================================================ */
+
+.pn-account {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+
+.pn-account label {
+  margin: 0;
+  font-size: calc(13px * var(--texto-escala));
+}
+
+.pn-account select {
+  min-width: 220px;
+}
+
+.pn-btn {
+  padding: 8px 14px;
+
+  color: var(--texto);
+  background: var(--campo);
+
+  border: 1px solid var(--linha);
+  border-radius: 8px;
+
+  font: inherit;
+  cursor: pointer;
+
+  transition: background 180ms ease;
+}
+
+.pn-btn:hover {
+  background: var(--papel);
+}
+
+/* ================================================
+   05. ESTRUTURA SUPERIOR
+================================================ */
+
+.pn-top {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr);
+  gap: 16px;
+  margin: 0 0 16px;
+}
+
+/* ================================================
+   06. CARD PRINCIPAL / HERO
+================================================ */
+
+.dashboard-content .pn-hero {
+  position: relative;
+  min-height: 168px;
+
+  margin: 0;
+  padding: 22px 24px;
+
+  overflow: hidden;
+
+  color: #fff;
+  background: #173f40;
+
+  border: 0;
+  border-radius: 16px;
+}
+
+.pn-hero::before,
+.pn-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.pn-hero::before {
+  width: 190px;
+  height: 190px;
+
+  top: -30px;
+  right: -20px;
+
+  background: #c7ff3820;
+}
+
+.pn-hero::after {
+  width: 80px;
+  height: 80px;
+
+  right: 40px;
+  bottom: 18px;
+
+  background: #4aa3b04d;
+}
+
+.pn-hero .pn-lbl {
+  color: #cfe3e3;
+}
+
+.pn-big {
+  display: block;
+
+  margin: 4px 0 2px;
+
+  font-size: calc(34px * var(--texto-escala));
+  letter-spacing: -0.5px;
+
+  overflow-wrap: anywhere;
+}
+
+.pn-sub {
+  display: block;
+  margin-bottom: 14px;
+
+  color: #cfe3e3;
+  font-size: calc(12px * var(--texto-escala));
+}
+
+.pn-cols2 {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+}
+
+.pn-cols2 b {
+  display: block;
+  margin-top: 2px;
+  font-size: calc(14px * var(--texto-escala));
+}
+
+.pn-hero .pn-pos {
+  color: #5fe69a;
+}
+
+.pn-hero .pn-neg {
+  color: #ff8f8f;
+}
+
+/* ================================================
+   07. CARDS DO PAINEL
+================================================ */
+
+.dashboard-content .pn-card {
+  margin: 0 0 16px;
+  padding: 20px 22px;
+
+  background: var(--campo);
+  border: 1px solid var(--pn-borda);
+  border-radius: 16px;
+}
+
+/* ================================================
+   08. RESERVAS
+================================================ */
+
+.pn-reserva .pn-lbl {
+  color: color-mix(in srgb, var(--texto) 68%, var(--campo));
+}
+
+.pn-reserva-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pn-pct {
+  display: block;
+  margin-top: 2px;
+
+  color: var(--titulo);
+  font-size: calc(26px * var(--texto-escala));
+}
+
+.pn-ico {
+  display: grid;
+  place-items: center;
+
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  color: #fff;
+  background: var(--pn-teal);
+  border-radius: 10px;
+}
+
+.pn-track {
+  height: 8px;
+  margin: 14px 0 10px;
+
+  overflow: hidden;
+
+  background: color-mix(in srgb, var(--linha) 25%, var(--campo));
+  border-radius: 99px;
+}
+
+.pn-track i {
+  display: block;
+  height: 100%;
+
+  background: var(--pn-teal);
+  border-radius: inherit;
+}
+
+.pn-reserva small {
+  display: block;
+  margin-top: 3px;
+  font-size: calc(12px * var(--texto-escala));
+}
+
+.pn-reserva .pn-warn {
+  color: #a02727;
+}
+
+:root[data-tema="escuro"] .pn-reserva .pn-warn {
+  color: #ffb9b9;
+}
+
+.pn-datem {
+  display: none;
+}
+
+/* ================================================
+   09. GRÁFICO DE MOVIMENTAÇÕES
+================================================ */
+
+.pn-chart h2,
+.pn-head h2,
+.pn-cats h2 {
+  margin: 0;
+  font-size: calc(15px * var(--texto-escala));
+}
+
+.pn-chart .pn-muted {
+  margin: 4px 0 8px;
+  font-size: calc(12px * var(--texto-escala));
+}
+
+.pn-legend {
+  display: flex;
+  gap: 16px;
+
+  margin: 0 0 12px;
+
+  font-size: calc(12px * var(--texto-escala));
+}
+
+.pn-legend span::before {
+  content: "";
+  display: inline-block;
+
+  width: 10px;
+  height: 10px;
+
+  margin-right: 6px;
+
+  background: var(--pn-teal);
+  border-radius: 3px;
+}
+
+.pn-legend .out::before {
+  background: var(--titulo);
+}
+
+/* Área do gráfico */
+
+.pn-plot {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.pn-y {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 160px;
+
+  color: color-mix(in srgb, var(--texto) 68%, var(--campo));
+  font-size: calc(11px * var(--texto-escala));
+  line-height: 1;
+}
+
+/* Semanas */
+
+.pn-weeks {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+
+  background:
+    repeating-linear-gradient(
+      to top,
+      transparent 0,
+      transparent calc(25% - 1px),
+      color-mix(in srgb, var(--linha) 30%, var(--campo)) calc(25% - 1px),
+      color-mix(in srgb, var(--linha) 30%, var(--campo)) 25%
+    ) top / 100% 160px no-repeat;
+}
+
+.pn-week {
+  display: grid;
+  grid-template-rows: 160px 26px;
+
+  justify-items: center;
+  align-items: end;
+}
+
+.pn-pair {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 160px;
+}
+
+.pn-bar {
+  display: block;
+
+  width: clamp(12px, 2.4vw, 26px);
+  height: calc(160px * var(--h) / 100);
+
+  border-radius: 6px 6px 3px 3px;
+}
+
+.pn-bar.in {
+  background: var(--pn-teal);
+}
+
+.pn-bar.out {
+  background: var(--titulo);
+}
+
+.pn-week.now .pn-bar.in {
+  background: var(--pn-lime);
+  outline: 1px solid color-mix(in srgb, var(--titulo) 50%, transparent);
+}
+
+:root[data-tema="escuro"] .pn-week.now .pn-bar.in {
+  background: #8fd8e0;
+  outline: 0;
+}
+
+.pn-week span {
+  align-self: center;
+
+  color: color-mix(in srgb, var(--texto) 68%, var(--campo));
+  font-size: calc(12px * var(--texto-escala));
+}
+
+.pn-week.now span {
+  color: var(--texto);
+  font-weight: 700;
+}
+
+/* ================================================
+   10. CABEÇALHOS E AÇÕES
+================================================ */
+
+.pn-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  gap: 10px;
+  margin: 6px 0 10px;
+}
+
+.pn-head span {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  font-size: calc(13px * var(--texto-escala));
+}
+
+.dashboard-content a.pn-cta {
+  display: inline-block;
+
+  padding: 8px 12px;
+
+  color: #173f40;
+  background: var(--pn-lime);
+
+  border-radius: 8px;
+
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dashboard-content a.pn-cta:hover {
+  filter: brightness(0.95);
+}
+
+/* ================================================
+   11. TABELA DE MOVIMENTAÇÕES
+================================================ */
+
+.pn-table-wrap {
+  margin: 0 0 16px;
+
+  overflow-x: auto;
+
+  background: var(--campo);
+  border: 1px solid var(--pn-borda);
+  border-radius: 14px;
+}
+
+.pn-table {
+  width: 100%;
+  min-width: 560px;
+
+  border-collapse: collapse;
+
+  font-size: calc(13px * var(--texto-escala));
+}
+
+.pn-table th {
+  padding: 12px 18px;
+
+  color: color-mix(in srgb, var(--texto) 70%, var(--campo));
+  background: color-mix(in srgb, var(--linha) 12%, var(--campo));
+
+  border-bottom: 1px solid var(--pn-borda);
+
+  font-size: calc(12px * var(--texto-escala));
+  font-weight: 600;
+  text-align: left;
+}
+
+.pn-table td {
+  padding: 15px 18px;
+
+  border-bottom: 1px solid var(--pn-borda);
+  vertical-align: middle;
+
+  overflow-wrap: anywhere;
+}
+
+.pn-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.pn-v {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pn-v.in {
+  color: var(--pn-pos);
+}
+
+/* Status */
+
+.pn-pill {
+  display: inline-block;
+
+  padding: 3px 10px;
+
+  border-radius: 99px;
+
+  font-size: calc(12px * var(--texto-escala));
+  white-space: nowrap;
+}
+
+.pn-pill.ok {
+  color: #1b6338;
+  background: #dff3e6;
+}
+
+.pn-pill.late {
+  color: #a02727;
+  background: #fde4e4;
+}
+
+.pn-pill.wait {
+  color: #484f58;
+  background: #e9e9e2;
+}
+
+/* Status no tema escuro */
+
+:root[data-tema="escuro"] .pn-pill.ok {
+  color: #8fe8b0;
+  background: #1f3d2c;
+}
+
+:root[data-tema="escuro"] .pn-pill.late {
+  color: #ffb9b9;
+  background: #4a2326;
+}
+
+:root[data-tema="escuro"] .pn-pill.wait {
+  color: #d4dde0;
+  background: #2b373b;
+}
+
+.pn-empty {
+  text-align: center;
+}
+
+/* ================================================
+   12. CATEGORIAS
+================================================ */
+
+.pn-cats ul {
+  display: grid;
+  gap: 10px;
+
+  margin: 12px 0 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.pn-cats li {
+  display: grid;
+  grid-template-columns: minmax(90px, 160px) 1fr auto;
+
+  align-items: center;
+  gap: 12px;
+
+  font-size: calc(13px * var(--texto-escala));
+}
+
+.pn-catbar {
+  height: 8px;
+
+  overflow: hidden;
+
+  background: color-mix(in srgb, var(--linha) 25%, var(--campo));
+  border-radius: 99px;
+}
+
+.pn-catbar i {
+  display: block;
+  height: 100%;
+
+  background: var(--titulo);
+  border-radius: inherit;
+}
+
+/* ================================================
+   13. RODAPÉ E NOTIFICAÇÕES
+================================================ */
+
+.pn-foot {
+  margin: 8px 0;
+
+  color: color-mix(in srgb, var(--texto) 68%, var(--campo));
+  font-size: calc(12px * var(--texto-escala));
+}
+
+.pn-logout {
+  margin: 0 0 24px;
+}
+
+.pn-bell {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 38px;
+  height: 38px;
+
+  color: var(--texto) !important;
+  background: var(--campo);
+
+  border: 1px solid var(--pn-borda);
+  border-radius: 10px;
+
+  text-decoration: none;
+}
+
+.pn-dot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+
+  width: 8px;
+  height: 8px;
+
+  background: #e5484d;
+  border: 1.5px solid var(--campo);
+  border-radius: 50%;
+}
+
+/* ================================================
+   14. TABLETS
+================================================ */
+
+@media (max-width: 1000px) {
+  .pn-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================================================
+   15. DISPOSITIVOS MÓVEIS
+================================================ */
+
+@media (max-width: 700px) {
+
+  .pn-table {
+    min-width: 0;
+  }
+
+  .pn-table th:nth-child(2),
+  .pn-table td:nth-child(2) {
+    display: none;
+  }
+
+  .pn-table th,
+  .pn-table td {
+    padding: 12px 10px;
+  }
+
+  .pn-datem {
+    display: block;
+
+    color: color-mix(in srgb, var(--texto) 68%, var(--campo));
+    font-size: calc(12px * var(--texto-escala));
+  }
+
+  .pn-cats li {
+    grid-template-columns: 1fr auto;
+  }
+
+  .pn-cats .pn-catbar {
+    grid-column: 1 / -1;
+    order: 3;
+  }
+
+  .pn-big {
+    font-size: calc(28px * var(--texto-escala));
+  }
+
+  .pn-card {
+    padding: 16px;
+  }
+
+  .pn-account {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .pn-account select {
+    min-width: 0;
+  }
+}

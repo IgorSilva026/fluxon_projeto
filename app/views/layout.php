@@ -7,6 +7,10 @@
     <?php foreach ($styles as $style): ?>
         <link rel="stylesheet" href="assets/css/<?= e($style) ?>.css">
     <?php endforeach; ?>
+
+        <link rel="stylesheet" href="assets/css/password.css">
+        <link rel="stylesheet" href="assets/css/password-visibility.css">
+        <link rel="stylesheet" href="assets/css/compact.css">
     <script src="assets/js/accessibility.js"></script>
 </head>
 <body class="<?= $wide ? 'fluxon-wide' : '' ?>">
@@ -18,6 +22,6 @@
     <?php else: ?>
         <?= $b ?>
     <?php endif; ?>
-    <script src="assets/js/password.js" defer></script>
+    <script src="assets/js/password-visibility.js" defer></script>
 </body>
 </html>

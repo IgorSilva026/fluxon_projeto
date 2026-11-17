@@ -1,20 +1,73 @@
+
+/* ================================================
+   FLUXON — SUPPORT
+   Conteúdo de suporte, FAQ e navegação
+================================================ */
+
+/* ================================================
+   01. PERGUNTAS E RESPOSTAS
+================================================ */
+
 .card details {
   padding: 14px 0;
-  border-bottom: 1px solid #c9cfc9;
+  border-bottom: 1px solid var(--linha, #c9cfc9);
 }
+
 .card summary {
   cursor: pointer;
   font-weight: 600;
   line-height: 1.5;
 }
+
+.card details[open] summary {
+  margin-bottom: 8px;
+}
+
+/* ================================================
+   02. NAVEGAÇÃO
+================================================ */
+
 .card nav p {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 18px;
 }
+
+/* ================================================
+   03. TERMOS E DESCRIÇÕES
+================================================ */
+
 .card dt {
   margin-top: 16px;
+  font-weight: 600;
 }
+
 .card dd {
   margin: 6px 0 0;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* ================================================
+   04. ACESSIBILIDADE
+================================================ */
+
+.card summary:focus-visible {
+  outline: 3px solid var(--foco, #9b6700);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ================================================
+   05. RESPONSIVIDADE
+================================================ */
+
+@media (max-width: 600px) {
+  .card details {
+    padding: 12px 0;
+  }
+
+  .card nav p {
+    gap: 10px 14px;
+  }
 }

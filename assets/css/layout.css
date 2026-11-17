@@ -1,32 +1,81 @@
-/* A largura depende da rota, inclusive quando há mensagens de retorno. */
+
+/* ================================================
+   FLUXON — LAYOUT SYSTEM
+   Largura, alinhamento e estrutura das páginas
+================================================ */
+
+/* ================================================
+   01. CONFIGURAÇÕES GLOBAIS
+================================================ */
+
 html {
   scrollbar-gutter: stable;
 }
+
+/* ================================================
+   02. LAYOUT DE PÁGINAS INTERNAS
+================================================ */
+
 body.fluxon-wide {
   display: block;
+
+  width: 100%;
+  min-height: 100vh;
+
   padding: 24px 16px;
 }
+
+/* ================================================
+   03. CONTAINER PRINCIPAL
+================================================ */
+
 body.fluxon-wide > .card,
 body.fluxon-wide > .col {
   width: 100%;
   max-width: 900px;
   min-width: 0;
-  margin: 0 auto;
+
+  margin-inline: auto;
 }
+
+/* ================================================
+   04. CARDS DENTRO DE COLUNAS
+================================================ */
+
 body.fluxon-wide > .col > .card {
   width: 100%;
   max-width: none;
 }
+
+/* ================================================
+   05. DIMENSIONAMENTO DOS CARDS
+================================================ */
+
 body.fluxon-wide .card {
   padding: 32px;
 }
+
+/* ================================================
+   06. CONTEÚDO DOS CARDS
+================================================ */
+
 body.fluxon-wide .card p,
 body.fluxon-wide .card li,
 body.fluxon-wide .card dd {
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
+
+/* ================================================
+   07. RESPONSIVIDADE
+================================================ */
+
 @media (max-width: 600px) {
+
+  body.fluxon-wide {
+    padding: 16px 12px;
+  }
+
   body.fluxon-wide .card {
     padding: 20px;
   }

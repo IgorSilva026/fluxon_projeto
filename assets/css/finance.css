@@ -1,0 +1,420 @@
+
+/* ================================================
+   FLUXON — FINANCE SYSTEM
+   Indicadores, formulários, tabelas e gráficos
+================================================ */
+
+/* ================================================
+   01. CONFIGURAÇÕES DO MÓDULO
+================================================ */
+
+:root {
+  --finance-incoming: #9dedbb;
+  --finance-outgoing: #42b8d0;
+
+  --finance-incoming-text: #245b31;
+  --finance-outgoing-text: #164b5a;
+
+  --finance-radius: 10px;
+  --finance-spacing: 20px;
+}
+
+:root[data-tema="escuro"] {
+  --finance-incoming: #286b48;
+  --finance-outgoing: #17647b;
+
+  --finance-incoming-text: #e0ffea;
+  --finance-outgoing-text: #e0f7ff;
+}
+
+/* ================================================
+   02. ESTRUTURA PRINCIPAL
+================================================ */
+
+body.fluxon-wide > .card.finance-shell,
+body.fluxon-wide > .col {
+  max-width: 1200px;
+}
+
+body.fluxon-wide .finance-shell {
+  width: 100%;
+  max-width: none;
+}
+
+.finance-shell {
+  line-height: 1.6;
+  min-width: 0;
+}
+
+.finance-shell section {
+  margin: 28px 0;
+}
+
+.finance-shell a {
+  overflow-wrap: anywhere;
+}
+
+/* ================================================
+   03. NAVEGAÇÃO FINANCEIRA
+================================================ */
+
+.finance-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  gap: 12px 22px;
+  margin: 20px 0;
+}
+
+.finance-nav a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.finance-nav [aria-current] {
+  font-weight: 800;
+  text-decoration-thickness: 3px;
+}
+
+/* ================================================
+   04. FILTROS E FORMULÁRIOS
+================================================ */
+
+.finance-shell .filters,
+.finance-shell .finance-form {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+
+  align-items: end;
+  gap: 12px 20px;
+
+  margin: 24px 0;
+}
+
+.finance-shell .finance-form p,
+.finance-shell .finance-form h2 {
+  grid-column: 1 / -1;
+}
+
+/* Campos */
+
+.finance-shell input,
+.finance-shell select {
+  width: 100%;
+  min-width: 0;
+
+  padding: 12px;
+
+  color: var(--texto);
+  background: var(--campo);
+
+  border: 1px solid var(--linha);
+  border-radius: var(--finance-radius);
+
+  font: inherit;
+}
+
+/* Labels */
+
+.finance-shell label {
+  font-size: inherit;
+}
+
+/* Checkbox */
+
+.finance-shell .check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.finance-shell input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+
+  flex-shrink: 0;
+  margin: 0;
+}
+
+/* Botões */
+
+.finance-shell .btn {
+  min-height: 48px;
+  font-size: inherit;
+}
+
+/* ================================================
+   05. AVISOS FINANCEIROS
+================================================ */
+
+.finance-note {
+  padding-inline-start: 16px;
+  border-inline-start: 4px solid var(--titulo);
+}
+
+/* ================================================
+   06. TABELAS
+================================================ */
+
+.table-scroll {
+  width: 100%;
+  max-width: 100%;
+
+  margin: 24px 0;
+
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.finance-shell table {
+  width: 100%;
+
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.finance-shell th,
+.finance-shell td {
+  min-width: 105px;
+  max-width: 320px;
+
+  padding: 12px;
+
+  vertical-align: top;
+  overflow-wrap: anywhere;
+
+  border-bottom: 1px solid var(--linha);
+}
+
+.finance-shell th {
+  color: var(--titulo);
+  font-weight: 700;
+}
+
+.finance-shell caption {
+  margin: 12px 0;
+
+  text-align: left;
+  font-weight: 700;
+}
+
+/* ================================================
+   07. DETALHAMENTOS
+================================================ */
+
+.finance-shell details {
+  margin: 10px 0;
+  padding: 12px;
+
+  border: 1px solid var(--linha);
+  border-radius: var(--finance-radius);
+}
+
+.finance-shell summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.finance-shell dt {
+  font-weight: 700;
+}
+
+.finance-shell dd {
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+}
+
+/* ================================================
+   08. INDICADORES FINANCEIROS
+================================================ */
+
+.finance-kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.finance-kpis > div {
+  min-width: 0;
+}
+
+.finance-kpis dd {
+  margin: 8px 0 0;
+
+  color: var(--titulo);
+
+  font-size: calc(24px * var(--texto-escala));
+  font-weight: 800;
+  letter-spacing: -0.5px;
+
+  overflow-wrap: anywhere;
+}
+
+/* ================================================
+   09. GRÁFICOS
+================================================ */
+
+.finance-chart {
+  margin: 25px 0;
+}
+
+.finance-chart figcaption {
+  margin-bottom: 16px;
+
+  font-size: calc(18px * var(--texto-escala));
+  font-weight: 700;
+}
+
+.chart-row {
+  margin: 18px 0;
+}
+
+/* Barra do gráfico */
+
+.bar-line {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  min-height: 42px;
+  margin: 5px 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--linha);
+  border-radius: 6px;
+
+  background: var(--papel);
+}
+
+/* Texto da barra */
+
+.bar-line span:last-child {
+  position: relative;
+  z-index: 1;
+
+  margin: 4px 12px;
+
+  color: var(--texto);
+  font-weight: 700;
+}
+
+/* Preenchimento */
+
+.bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+
+  min-width: 0;
+
+  opacity: 0.65;
+  transition: width 250ms ease;
+}
+
+/* Receitas */
+
+.bar.incoming {
+  background: var(--finance-incoming);
+}
+
+/* Despesas */
+
+.bar.outgoing {
+  background: var(--finance-outgoing);
+}
+
+/* ================================================
+   10. ACESSIBILIDADE
+================================================ */
+
+.finance-shell :focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 3px;
+}
+
+/* ================================================
+   11. RESPONSIVIDADE
+================================================ */
+
+@media (max-width: 700px) {
+
+  .finance-nav {
+    gap: 10px 14px;
+  }
+
+  .finance-shell section {
+    margin: 20px 0;
+  }
+
+  .finance-shell .filters,
+  .finance-shell .finance-form {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 18px 0;
+  }
+
+  .finance-shell .finance-form p,
+  .finance-shell .finance-form h2 {
+    grid-column: auto;
+  }
+
+  .finance-shell th,
+  .finance-shell td {
+    padding: 10px;
+  }
+
+  .finance-kpis {
+    gap: 14px;
+  }
+
+  .finance-chart {
+    margin: 20px 0;
+  }
+}
+
+/* ================================================
+   12. TELAS PEQUENAS
+================================================ */
+
+@media (max-width: 480px) {
+
+  .finance-shell {
+    padding: 18px !important;
+  }
+
+  .finance-nav {
+    gap: 10px;
+  }
+
+  .finance-shell .btn {
+    width: 100%;
+  }
+
+  .finance-kpis {
+    flex-direction: column;
+  }
+
+  .finance-kpis > div {
+    width: 100%;
+  }
+
+  .finance-chart figcaption {
+    font-size: calc(16px * var(--texto-escala));
+  }
+}
+
+/* ================================================
+   13. MOVIMENTO REDUZIDO
+================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .finance-shell .bar {
+    transition: none;
+  }
+}

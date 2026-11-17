@@ -62,3 +62,22 @@ A execução usou PHP 8.5.10 em WebAssembly; não foi executada no PHP 8.2 do XA
 6. Publique o conteúdo da pasta revisada no GitHub, mantendo os arquivos privados e `vendor/` fora do commit.
 
 Esta revisão trata de organização, referências, limpeza e correções de integração identificadas. Não é uma auditoria completa de segurança nem comprovação de funcionamento em produção.
+
+## Atualização de 17/11/2026 — visualização de senha
+
+A implementação antiga `assets/js/password.js` foi substituída pela
+`assets/js/password-visibility.js`. A nova implementação está carregada
+nas telas de cadastro, login e redefinição de senha, além do layout
+compartilhado da aplicação PHP.
+
+Os estilos foram separados em dois arquivos:
+- `assets/css/password.css`: estrutura do campo e botão de visualização.
+- `assets/css/password-visibility.css`: máscara visual e comportamento
+  de exibição da senha.
+
+A lista `remocoes.json` registra as remoções históricas do pacote original
+e não representa necessariamente o estado atual dos arquivos.
+
+O arquivo legado `assets/js/password.js` foi removido em 17/11/2026.
+Sua implementação foi substituída por `assets/js/password-visibility.js`,
+que permanece como versão oficial.

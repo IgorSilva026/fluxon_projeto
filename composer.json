@@ -14,7 +14,10 @@
       "@php tests/profile_validation.php",
       "@php tests/password_validation.php",
       "@php tests/review_validation.php",
-      "@php tests/deletion_validation.php"
+      "@php tests/deletion_validation.php",
+      "@php tests/finance_validation.php",
+      "@php tests/finance_reports.php",
+      "@php tests/painel_service.php"
     ]
   }
 }
